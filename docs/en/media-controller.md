@@ -8,7 +8,7 @@ Checkpoint of 6 October 2026: portable foundation and **Android Media3 1.11.1 fo
 
 In a Xeno.SDK application, `XenoEnableMedia=true` adds the portable module and, on Android only, `XenoUI.Media.Android`. The generated Activity registers the capability before `OnStart`. A custom Activity must provide this registration through the `XenoView(context, configureNative)` overload and forward `HandleForeground`/`HandleBackground`, then call `Shutdown()` on destruction. This method stops the GL thread and releases the runtime once, without prematurely disposing the Java peer still held by the window; do not call `view.Dispose()` from `Activity.OnDestroy`. No Android service or background permission is added. iOS still has no native capability at this checkpoint.
 
-Source mode uses the repository projects; package mode requires publishing both modules with the same version as the SDK runtime. To create the optional **local** feed: `./tools/Pack-XenoSdk.ps1 -SkipIos -IncludeMedia`. An SDK already installed is not changed just by editing the repository: repack and use a fresh evaluation cache or a new version before testing its new targets.
+Both modules, [`XenoUI.Media`](https://www.nuget.org/packages/XenoUI.Media) and [`XenoUI.Media.Android`](https://www.nuget.org/packages/XenoUI.Media.Android), are published on nuget.org with the same version as `Xeno.SDK`; the SDK references them automatically when the property is enabled.
 
 ```xml
 <PropertyGroup>
@@ -77,13 +77,7 @@ The controller does not publish an ECS slab yet. Do not read it directly from a 
 
 The native contract requires consistent snapshots, commands on the appropriate thread, revisions captured at the origin of the asynchronous operation and a destruction that cancels callbacks. The Android adapter does not route any asynchronous result from an old item: it stops/removes the previous source, then reads the player's current state on its owner thread. `Stop` and `Dispose` are direct and do not go through a queue that might lose them. Leases and video frame transports are still to be implemented.
 
-## Reproducible verification
-
-```powershell
-dotnet run --project tests/XenoUI.Media.RegressionTests -c Release -p:NuGetAudit=false
-dotnet run --project tests/XenoUI.Core.RegressionTests -c Release --no-restore
-./tests/XenoUI.Media.RegressionTests/TestSdkReferences.ps1
-```
+## Validation
 
 Checkpoint results: 23/23 media, 122/122 Core, eight SDK evaluations and the Android SampleApp build without warnings or errors. After warm-up, the loop of 100,000 synchronisations/snapshot reads with a simulated backend allocates 0 managed bytes on its thread. This test does not demonstrate zero allocation for the native players, the pump, reactive labels or the native publication of a navigation commit. Physical interruptions, the background service, iOS and the full benchmark remain to be done.
 

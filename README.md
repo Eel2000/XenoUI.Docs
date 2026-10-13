@@ -1,6 +1,6 @@
 # XenoUI documentation
 
-Source of the [XenoUI](https://github.com/Eel2000/XenoUI) documentation site, published at
+Source of the XenoUI documentation site, published at
 **https://eel2000.github.io/XenoUI.Docs/** (English) and **/fr/** (French).
 
 The site is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and

@@ -30,13 +30,6 @@ Networking and deserialisation run neither in `Body()` nor in frames. The tasks,
 
 No SQLite, disk cache, persistent favourites, sync or offline guarantee at this stage. Restarting the process loses the data.
 
-## Reproducible tests
-
-```powershell
-dotnet run --project tests/SampleApp.Api.RegressionTests -c Release
-# Optional network integration, separate from the deterministic tests:
-dotnet run --project tests/SampleApp.Api.RegressionTests -c Release -- --live
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
-```
+## Tests
 
 The portable tests compile the services for `net10.0`, without a platform project. They cover HTTP, JSON, cancellation, deferred publication, out-of-order results, error/retry, empty response, selection and disposal. Comments from another article and duplicate IDs are rejected. The live test reads the articles then the comments of the first article. It does not prove SampleApp runs on a phone: separately check loading, airplane mode, Retry, quick Refresh, list → detail → Back, changing article while loading and background/foreground on a device. Full iOS validation requires macOS/Xcode.

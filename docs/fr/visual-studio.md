@@ -7,32 +7,28 @@ XenoUI fournit deux éléments pour Visual Studio :
 - **des templates** `dotnet new`, visibles dans *Créer un projet* et *Ajouter › Nouvel élément* : « XenoUI App », « XenoUI Page » et « XenoUI Component » ;
 - **l’extension XenoUI Preview** : une fenêtre d’outil qui affiche, pendant la frappe, les composants et pages marqués `[Preview]`, comme les aperçus Compose d’Android Studio. Elle ne compile pas le projet par MSBuild et ne lance ni l’application, ni un émulateur.
 
-> **Statut : preview locale `0.1.0-preview.5`.** Rien n’est publié sur nuget.org ni sur le Marketplace. Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 10 (installé avec le SDK .NET 10) pour le serveur de rendu. Templates, compilation en mémoire et rendu sont couverts par des tests ; l’affichage de la fenêtre dans l’IDE reste à valider avant publication.
+> **Statut : `{{ xeno_version }}`.** Les templates sont publiés sur [nuget.org](https://www.nuget.org/packages/XenoUI.Templates) ; l’extension XenoUI Preview arrive bientôt sur le Visual Studio Marketplace. Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 10 (installé avec le SDK .NET 10) pour le serveur de rendu.
 
 ## Installer
 
-En bref, depuis la racine du dépôt :
-
 ```powershell
-./tools/Pack-XenoSdk.ps1 -IncludeMedia -IncludeVisualStudio
-dotnet new install ./artifacts/packages/XenoUI.Templates.0.1.0-preview.5.nupkg
+dotnet new install XenoUI.Templates::{{ xeno_version }}
 ```
 
-Puis, Visual Studio fermé, double-cliquez `artifacts/visualstudio/XenoUI.VisualStudio.0.1.0-preview.5.vsix`. Les templates apparaissent dans Visual Studio au prochain démarrage.
+Les templates apparaissent dans Visual Studio au prochain démarrage. L’extension XenoUI Preview s’installera depuis *Extensions › Gérer les extensions* dès sa publication sur le Marketplace.
 
-Prérequis, installation depuis nuget.org, `VSIXInstaller` en ligne de commande, mise à jour, désinstallation et dépannage : [guide d’installation](installation.md#7-installer-le-previewer-extension-visual-studio).
+Prérequis, mise à jour, désinstallation et dépannage : [guide d’installation](installation.md#6-le-previewer-extension-visual-studio).
 
 ## Créer un projet
 
 Dans Visual Studio : *Créer un projet* › filtre « XenoUI » › **XenoUI App**. En ligne de commande :
 
 ```powershell
-dotnet new xenoui -n MyApp --feed D:/chemin/XenoUI/artifacts/packages
+dotnet new xenoui -n MyApp
 ```
 
 | Option | Effet |
 |---|---|
-| `--feed <dossier>` | Génère un `NuGet.config` qui ajoute le feed local ; indispensable tant que le SDK n’est pas publié |
 | `--ios` | Ajoute `net10.0-ios` (workload iOS requis ; le build de l’app exige macOS et Xcode) |
 | `--appId com.example.myapp` | Identifiant Android/iOS ; par défaut `com.companyname.<nom>` |
 | `--sdkVersion <version>` | Version de `Xeno.SDK` épinglée dans `global.json` ; par défaut celle du pack de templates |
@@ -135,23 +131,15 @@ flowchart LR
 - **L’extension** est *out-of-process* (VisualStudio.Extensibility) : elle ne s’exécute jamais dans `devenv.exe`.
 - **Le serveur de rendu** est un processus distinct possédé par l’extension. Il lit le `.csproj` sans évaluer MSBuild, compile en mémoire avec Roslyn les sources partagées du projet (hors `bin`, `obj`, `Platforms/`) avec les usings implicites de `Xeno.SDK` et les générateurs de source du framework, embarque les assets, charge l’assembly dans un contexte collectible, rend chaque aperçu avec `PreviewRenderer`, puis décharge tout.
 - **Runtime du projet** : les aperçus sont compilés et rendus avec la même version de XenoUI que le projet, jamais avec une copie figée dans l’extension :
-  1. projet situé dans un clone XenoUI (le SampleApp, un contributeur) : `XenoUI.Core`, `StandardLibrary` et `Media` sont compilés en mémoire depuis les sources du clone, puis gardés en cache tant qu’aucun fichier ne change ; une nouvelle API du framework est donc visible sans build ;
-  2. sinon, les packages de la version `Xeno.SDK` du projet (`Sdk="Xeno.SDK/x"` ou `global.json`), lus dans le cache NuGet ;
+  1. projet situé dans les sources de XenoUI (contributeurs du framework) : `XenoUI.Core`, `StandardLibrary` et `Media` sont compilés en mémoire depuis ces sources, puis gardés en cache tant qu’aucun fichier ne change ;
+  2. sinon, les packages de la version `Xeno.SDK` du projet (`Sdk="Xeno.SDK/x"` ou `global.json`), lus dans le cache NuGet après le restore ;
   3. à défaut (projet jamais restauré), le runtime embarqué dans l’extension, avec un avertissement dans la fenêtre : lancez un build ou `dotnet restore`.
 
   Le runtime utilisé est affiché dans la ligne d’état. Comme le build, la compilation utilise C# 14 et les assemblies de référence des dépendances (SkiaSharp, RichTextKit).
 - **Léger** : priorité basse, GC workstation non concurrent, `ConserveMemory`, plafond de tas de 768 Mo, compilation Roslyn mono-cœur, aucune activité au repos (lecture bloquante de stdin). Une requête identique à la précédente répond en quelques dizaines de millisecondes sans recompiler. Le serveur s’arrête seul après 15 minutes d’inactivité ou à la fin de l’hôte d’extensions, et redémarre à la demande.
 - **Robuste** : un aperçu qui dépasse 10 s (boucle infinie) arrête le serveur ; un plantage ou une réponse absente au bout de 45 s est signalé dans la fenêtre et le serveur est relancé à la modification suivante. L’IDE n’est jamais touché.
 
-Ordres de grandeur mesurés sur le SampleApp (poste de développement, Release) : premier rendu ~13 s quand le runtime est compilé depuis les sources du clone, ~5 s depuis les packages ; puis ~1,6 s de compilation et ~0,7 s de rendu par modification ; ~150 Mo de mémoire de travail.
-
-Diagnostic sans Visual Studio :
-
-```powershell
-dotnet tools/visualstudio/XenoUI.PreviewServer/bin/Release/net10.0/XenoUI.PreviewServer.dll --render samples/SampleApp/Design/Ui.cs --out ./preview-out
-```
-
-La commande imprime la réponse JSON et conserve les PNG dans `--out`.
+Ordres de grandeur mesurés (poste de développement, Release) : premier rendu ~5 s ; puis ~1,6 s de compilation et ~0,7 s de rendu par modification ; ~150 Mo de mémoire de travail.
 
 ## Limites
 

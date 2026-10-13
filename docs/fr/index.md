@@ -1,22 +1,21 @@
 # Documentation XenoUI
 
-[Accueil du dépôt](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Guide développeur](developer-guide.md) · [Dépannage](troubleshooting.md) · [Architecture](architecture/index.md)
+[Installation](installation.md) · [Guide développeur](developer-guide.md) · [Dépannage](troubleshooting.md) · [Architecture](architecture/index.md)
 
-Cet index est le point d’entrée officiel de la documentation du dépôt. Il distingue les documents de référence actuels des notes historiques afin d’éviter qu’un ancien plan soit pris pour le comportement du code.
+Cet index est le point d’entrée officiel de la documentation XenoUI. Il distingue les documents de référence actuels des notes historiques afin d’éviter qu’un ancien plan soit pris pour le comportement du code.
 
 ## Parcours recommandés
 
 ### Développeur d’application
 
-1. [Installation](installation.md) : packages, SDK, templates, outil `xeno` et previewer Visual Studio, depuis nuget.org ou un feed local.
+1. [Installation](installation.md) : packages, SDK, templates, outil `xeno` et previewer Visual Studio, depuis nuget.org.
 2. [Guide développeur](developer-guide.md) : création d’un projet, API, état, navigation, assets, texte, appareils et IDE.
 3. [Dépannage par symptôme](troubleshooting.md) : appareil absent, build, écran vide, scroll, clavier, assets et navigation.
 4. [Navigation et NavigationScaffold](navigation-scaffold.md) : piles, transitions, navigation adaptative, FAB, action centrale, formes et RTL.
-5. [`SampleApp`](https://github.com/Eel2000/XenoUI/tree/master/samples/SampleApp) : démonstration exécutable des capacités actuelles.
-6. [Xeno.SDK](xeno-sdk.md) : SDK NuGet, feed local, projet hors dépôt et personnalisation du build.
-7. [Démonstration API](sample-api.md) : HTTP portable, liste distante, annulation et tests, sans SQLite.
-8. [Texte contraint et paramètres typés](text-layout-navigation.md) : wrap, ellipsis, AutoSize, payloads de navigation et espace réservé à la BottomBar.
-9. [Visual Studio](visual-studio.md) : templates de projet et d’éléments, `[Preview]` et fenêtre XenoUI Preview.
+5. [Xeno.SDK](xeno-sdk.md) : SDK NuGet, configuration du projet et personnalisation du build.
+6. [Démonstration API](sample-api.md) : HTTP portable, liste distante, annulation et tests, sans SQLite.
+7. [Texte contraint et paramètres typés](text-layout-navigation.md) : wrap, ellipsis, AutoSize, payloads de navigation et espace réservé à la BottomBar.
+8. [Visual Studio](visual-studio.md) : templates de projet et d’éléments, `[Preview]` et fenêtre XenoUI Preview.
 
 ### Contributeur framework
 
@@ -35,10 +34,10 @@ Cet index est le point d’entrée officiel de la documentation du dépôt. Il d
 
 | Document | Statut | Rôle |
 |---|---|---|
-| [Installation](installation.md) | **Canonique, preview locale** | Installer et mettre à jour packages, SDK, templates, `xeno` et previewer |
+| [Installation](installation.md) | **Canonique, preview nuget.org** | Installer et mettre à jour packages, SDK, templates, `xeno` et previewer |
 | [Guide développeur](developer-guide.md) | **Canonique** | Contrat d’usage public constaté dans le code actuel |
-| [Xeno.SDK](xeno-sdk.md) | **Canonique, preview locale** | Configuration et distribution du SDK MSBuild |
-| [Visual Studio](visual-studio.md) | **Canonique, preview locale** | Templates, `[Preview]` et extension XenoUI Preview |
+| [Xeno.SDK](xeno-sdk.md) | **Canonique, preview nuget.org** | Configuration du SDK MSBuild |
+| [Visual Studio](visual-studio.md) | **Canonique, preview** | Templates, `[Preview]` et extension XenoUI Preview |
 | [Navigation et NavigationScaffold](navigation-scaffold.md) | **Canonique** | API de navigation, transitions, Scaffold et lifecycle |
 | [Dépannage](troubleshooting.md) | **Canonique** | Diagnostic opérationnel |
 | [Module d’architecture](architecture/index.md) | **Canonique** | Référence interne et guide de contribution |
@@ -62,12 +61,12 @@ En cas de contradiction, appliquer cet ordre :
 3. notes de conception ;
 4. plans et roadmaps historiques.
 
-Le dépôt est pré-V1 : un comportement observé n’est stable que s’il est couvert par un test et explicitement présenté comme contrat. Les limitations connues sont centralisées dans [Décisions et trajectoire V1](architecture/decisions-v1.md#3-dette-technique-et-risques).
+XenoUI est pré-V1 : un comportement observé n’est stable que s’il est couvert par un test et explicitement présenté comme contrat. Les limitations connues sont centralisées dans [Décisions et trajectoire V1](architecture/decisions-v1.md#3-dette-technique-et-risques).
 
 ## Conventions
 
 - Les dimensions publiques sont exprimées en unités logiques : dp Android, points iOS.
 - Les couleurs sont des entiers ARGB `0xAARRGGBB`.
 - Les positions de texte utilisent des offsets UTF-16, comme les API natives Android/iOS.
-- Les commandes sont montrées depuis la racine du dépôt.
+- Les commandes sont montrées depuis le dossier de l’application (`MyApp/`, celui du `.csproj`).
 - Les blocs PowerShell et Bash signalent les différences de syntaxe quand elles comptent.

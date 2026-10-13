@@ -1,8 +1,8 @@
 # Guide développeur XenoUI
 
-[Accueil](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Index docs](index.md) · [Dépannage](troubleshooting.md) · [Architecture](architecture/index.md)
+[Index docs](index.md) · [Installation](installation.md) · [Dépannage](troubleshooting.md) · [Architecture](architecture/index.md)
 
-Ce guide décrit l’usage du code présent dans ce dépôt. Il s’adresse aux développeurs d’applications et aux contributeurs du framework. Les nouveaux projets utilisent `Xeno.SDK`, un SDK NuGet versionné en preview locale ; il n'est pas encore publié sur nuget.org. Pour installer packages, SDK, templates, outil `xeno` et previewer hors dépôt, suivez le [guide d’installation](installation.md) ; le [guide SDK](xeno-sdk.md) détaille la configuration du build.
+Ce guide décrit l’usage public de XenoUI pour construire une application. Les projets utilisent [`Xeno.SDK`](https://www.nuget.org/packages/Xeno.SDK), un SDK MSBuild publié sur nuget.org en preview (`{{ xeno_version }}`). Pour installer templates, outil `xeno` et previewer, suivez le [guide d’installation](installation.md) ; le [guide SDK](xeno-sdk.md) détaille la configuration du build.
 
 ## 1. Périmètre et maturité
 
@@ -13,16 +13,15 @@ XenoUI fournit aujourd’hui :
 - une navigation par pile, avec bouton Retour natif Android ;
 - du scrolling, des images, polices, icônes, boutons et effets ;
 - un éditeur de texte dessiné par XenoUI, connecté à l’IME natif ;
-- un CLI de découverte/lancement Android et une extension VS Code expérimentale.
+- l’outil `xeno` de découverte et de lancement sur appareils Android.
 
-Android est le parcours de référence validé dans le dépôt. iOS nécessite macOS/Xcode et n’est pas validé par la CI ou la machine Windows actuelle. `LazyColumn<T>` et `LazyRow<T>` ne construisent que le viewport et son overscan.
+Android est le parcours de référence validé. iOS nécessite macOS/Xcode et n’est pas encore validé de bout en bout. `LazyColumn<T>` et `LazyRow<T>` ne construisent que le viewport et son overscan.
 
 ## 2. Prérequis
 
 ### Commun
 
 - SDK .NET 10 (`dotnet --version`) ;
-- Git ;
 - workload correspondant à la cible ;
 - un IDE facultatif : Visual Studio ou VS Code avec C# Dev Kit.
 
@@ -40,37 +39,37 @@ N’installez `ios` que sur une machine capable de construire iOS. La compilatio
 - `adb` accessible par `ANDROID_SDK_ROOT`, `ANDROID_HOME`, l’emplacement SDK utilisateur standard ou le `PATH` ;
 - un émulateur démarré ou un téléphone avec Options développeur et Débogage USB.
 
-Vérification :
+Vérification (après [installation de `xeno`](installation.md#5-installer-loutil-xeno)) :
 
 ```powershell
 adb devices -l
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices
+xeno devices
 ```
 
 Un téléphone `unauthorized` doit être déverrouillé ; acceptez ensuite l’empreinte RSA « Autoriser le débogage USB ».
 
-## 3. Cloner, restaurer et valider le dépôt
-
-Depuis la racine :
+## 3. Installer les outils
 
 ```powershell
-./tools/Pack-XenoSdk.ps1 -SkipIos
-dotnet restore XenoUI.Core/XenoUI.Core.csproj
-dotnet restore XenoUI.BuildTasks/XenoUI.BuildTasks.csproj
-dotnet restore samples/SampleApp/SampleApp.csproj -p:TargetFramework=net10.0-android
-dotnet run --project tests/XenoUI.Core.RegressionTests/XenoUI.Core.RegressionTests.csproj
-dotnet run --project tests/XenoUI.Tooling.RegressionTests/XenoUI.Tooling.RegressionTests.csproj
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet new install XenoUI.Templates::{{ xeno_version }}
+dotnet tool install --global XenoUI.Tooling --version {{ xeno_version }}
 ```
 
-Les suites de régression sont des exécutables console : utilisez `dotnet run`, pas `dotnet test`.
+Détails, mise à jour et previewer Visual Studio : [Installation](installation.md).
 
-## 4. Créer une application dans le dépôt
+## 4. Créer une application
 
-Le projet consommateur utilise le SDK MSBuild `Xeno.SDK`. Le feed local doit être produit avant le premier restore. Voir [Xeno.SDK](xeno-sdk.md) pour créer un projet hors dépôt, configurer NuGet et centraliser la version.
+```powershell
+dotnet new xenoui -n MyApp
+cd MyApp
+```
+
+Les commandes suivantes s’exécutent depuis le dossier `MyApp/`.
+
+Le projet généré utilise le SDK MSBuild `Xeno.SDK`, restauré depuis nuget.org. Voir [Xeno.SDK](xeno-sdk.md) pour configurer un projet existant et centraliser la version dans `global.json`.
 
 ```xml
-<Project Sdk="Xeno.SDK/0.1.0-preview.5">
+<Project Sdk="Xeno.SDK/{{ xeno_version }}">
 
   <PropertyGroup>
     <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
@@ -84,7 +83,7 @@ Le projet consommateur utilise le SDK MSBuild `Xeno.SDK`. Le feed local doit êt
 </Project>
 ```
 
-Aucun chemin relatif vers les sources du framework n'est requis. Dans le dépôt, le SampleApp utilise un mode source explicite pour développer le runtime ; les projets externes utilisent les packages NuGet. Valeurs par défaut surchargeables :
+Valeurs par défaut surchargeables :
 
 | Propriété | Défaut | Rôle |
 |---|---:|---|
@@ -140,32 +139,30 @@ public sealed class HomePage : XenoPage
 Lister les cibles :
 
 ```powershell
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --json
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --watch
+xeno devices
+xeno devices --json
+xeno devices --watch
 ```
 
 Construire puis installer/lancer :
 
 ```powershell
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- run `
-  --project samples/SampleApp/SampleApp.csproj `
-  --device R58X70F8NPN `
+xeno run `
+  --project MyApp.csproj `
+  --device <device-id> `
   --framework net10.0-android `
   --configuration Debug
 ```
 
 Le CLI choisit le RID depuis l’ABI de la cible (`android-arm64`, `android-x64`, etc.), construit l’APK signé de debug, exécute `adb install -r -t`, puis lance l’activité. `--no-build` réutilise un APK déjà produit pour le même RID.
 
-Si l’outil est ultérieurement packagé et installé comme .NET tool, les mêmes commandes deviennent `xeno devices` et `xeno run ...`. Cette distribution n’est pas encore publiée dans l’état actuel du dépôt.
-
 ### iOS
 
 Sur macOS :
 
 ```bash
-dotnet restore samples/SampleApp/SampleApp.csproj -p:TargetFramework=net10.0-ios
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-ios
+dotnet restore MyApp.csproj -p:TargetFramework=net10.0-ios
+dotnet build MyApp.csproj -f net10.0-ios
 ```
 
 Le CLI `xeno` n’a pas encore de provider iOS. Utilisez les outils .NET/iOS et Xcode pour sélectionner, signer et lancer la cible. Ne considérez pas une compilation iOS depuis Windows comme une validation runtime.
@@ -269,8 +266,6 @@ public override XenoComponent Body() =>
 ```
 
 Une reconstruction remet à zéro l’arbre ECS transitoire et rappelle `Body()` sous verrou. Elle ne diff pas l’ancien et le nouvel arbre. Les objets persistants (`State`, `ScrollState`, `TextEditController`) doivent être des champs de page, jamais des variables recréées dans `Body()`.
-
-> Dans le `SampleApp`, un `UseState` local est utilisé à des fins de démonstration. Pour une identité et une durée de vie non ambiguës à travers les reconstructions, préférez un champ.
 
 ### Déclarer sans `new`
 
@@ -480,47 +475,30 @@ Le moteur gère la composition, les paires de substitution, la suppression par p
 
 Le registre actuel contient principalement `ITextInputCapability` et `IClipboardCapability`, consommés par le runtime. Attention : `XenoPage.App` est encore interne ; une page applicative ne possède donc pas aujourd’hui d’accès public propre au tunnel. L’exposition/injection de capacités aux pages fait partie du contrat public à finaliser avant V1. Ne contournez pas cette limite par un singleton plateforme.
 
-Pour une fonctionnalité future (batterie, notification, audio, appel, réseau spécialisé), définissez un contrat `INativeCapability` dans le cœur, implémentez-le dans chaque hôte, puis enregistrez-le avant le premier build. N’introduisez pas de types Android/UIKit dans `XenoUI.Core`.
+Pour une nouvelle capacité (batterie, notification, audio, appel, réseau spécialisé), définissez un contrat `INativeCapability` sans type plateforme, implémentez-le dans chaque hôte, puis enregistrez-le avant le premier build. N’introduisez pas de types Android/UIKit dans le code partagé. Le contrat détaillé (threading, durée de vie, annulation, permissions) est décrit dans [Texte, IME et NativeTunnel](architecture/text-input-and-native.md#9-nativetunnel).
 
 ## 13. Visual Studio
 
-1. Ouvrez `XenoUI.slnx`.
-2. Laissez la restauration des workloads/projets se terminer.
-3. Définissez `SampleApp` comme projet de démarrage.
+1. Ouvrez la solution de votre application.
+2. Laissez la restauration NuGet se terminer.
+3. Définissez le projet XenoUI comme projet de démarrage.
 4. Sélectionnez le TFM Android et une cible Android standard de Visual Studio.
-5. Construisez/déployez.
+5. Construisez/déployez avec F5.
 
-Le SDK expose les capacités `XenoUI`, `Android` et `AndroidApplication` nécessaires à l’évaluation de projet. L’entrée `<Deploy />` de la solution autorise le déploiement de `SampleApp`.
+Le SDK expose les capacités `XenoUI`, `Android` et `AndroidApplication` nécessaires à l’évaluation de projet. Le previewer **XenoUI Preview** est décrit dans [Visual Studio](visual-studio.md).
 
 En cas d’absence de cible, validez d’abord `adb devices -l`, puis `xeno devices`. Si le CLI voit le téléphone mais pas Visual Studio, rechargez la solution après avoir choisi le TFM Android et vérifiez l’installation du workload Android de Visual Studio.
 
 ## 14. VS Code
 
-L’extension expérimentale se trouve dans `tools/vscode-xenoui`. Elle détecte un workspace dont un `.csproj` cible Android et importe XenoUI. Elle fournit :
-
-- `XenoUI: Refresh Devices` ;
-- `XenoUI: Select Device` ;
-- `XenoUI: Run on Selected Device` ;
-- un indicateur de cible dans la barre de statut.
-
-Elle rafraîchit les appareils périodiquement et appelle le CLI. Dans ce dépôt, elle utilise le projet `XenoUI.Tooling`; chez un consommateur, elle attend `xeno` sur le `PATH` ou une configuration `xenoui.cliPath`.
-
-Pour installer ses dépendances et produire le VSIX :
-
-```powershell
-Set-Location tools/vscode-xenoui
-npm install
-npm run package
-```
-
-`npm test` vérifie la découverte des projets `Xeno.SDK` et la compatibilité avec les anciens imports. La validation de l'Extension Host, des appareils et du debugger reste distincte et nécessaire avant publication Marketplace.
+Avec C# Dev Kit, construisez et lancez depuis le terminal intégré avec `xeno run` (§ 5). Une extension VS Code dédiée (sélection d’appareil et lancement) est en préparation et n’est pas encore publiée.
 
 ## 15. Debugging
 
 ### Build détaillé
 
 ```powershell
-dotnet build samples/SampleApp/SampleApp.csproj `
+dotnet build MyApp.csproj `
   -f net10.0-android -v:diagnostic
 ```
 
@@ -528,31 +506,23 @@ dotnet build samples/SampleApp/SampleApp.csproj `
 
 ```powershell
 adb logcat
-adb shell pidof com.xenoui.sample
+adb shell pidof com.example.myapp
 adb logcat --pid=<pid>
 ```
 
 ### Inspection MSBuild
 
 ```powershell
-dotnet msbuild samples/SampleApp/SampleApp.csproj `
+dotnet msbuild MyApp.csproj `
   -p:TargetFramework=net10.0-android `
   -getProperty:ApplicationId
 ```
 
 Un écran vide ou un crash de navigation doit être recherché dans l’ordre suivant : exception de `Body()`, page non enregistrée, objet persistant créé dans `Body()`, accès à une entité d’un arbre précédent, puis erreur layout/render. Voir le [dépannage](troubleshooting.md).
 
-## 16. Tests et stratégie de validation
+## 16. Valider son application
 
-Avant toute contribution runtime :
-
-```powershell
-dotnet run --project tests/XenoUI.Core.RegressionTests/XenoUI.Core.RegressionTests.csproj
-dotnet run --project tests/XenoUI.Tooling.RegressionTests/XenoUI.Tooling.RegressionTests.csproj
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
-```
-
-Puis validez sur appareil ou émulateur les parcours affectés :
+Validez sur appareil ou émulateur les parcours concernés par vos changements :
 
 - démarrage et retour racine ;
 - navigation répétée avant/arrière ;
@@ -562,9 +532,20 @@ Puis validez sur appareil ou émulateur les parcours affectés :
 - clavier affiché/caché et changement de champ ;
 - reconstruction pendant une session texte.
 
-Un changement Android doit conserver la compilation iOS au minimum ; un changement de contrat natif doit recevoir deux implémentations ou déclarer explicitement la cible non supportée.
+Validez iOS sur macOS avant d’annoncer la compatibilité iOS de votre application.
 
-## 17. Contribuer au framework
+## 17. Versionnage et compatibilité
+
+XenoUI est publié en preview sur nuget.org (`{{ xeno_version }}`) ; aucune version stable n’existe encore. Jusqu’à V1 :
+
+- épinglez la version de `Xeno.SDK` dans `global.json` et mettez-la à jour volontairement ;
+- ne comptez pas sur une compatibilité source ou binaire entre deux previews ;
+- tous les packages XenoUI d’une application doivent porter la même version, ce que `Xeno.SDK` garantit ;
+- validez Android sur au moins une cible arm64 réelle avant une release de votre application.
+
+Une V1 apportera une API publique relue, une politique de support OS/.NET et SemVer. La trajectoire est décrite dans [Décisions et trajectoire V1](architecture/decisions-v1.md).
+
+## 18. Contribuer au framework
 
 1. Lisez le [module d’architecture](architecture/index.md).
 2. Identifiez la frontière correcte : Core, StandardLibrary, hôte plateforme, BuildTasks, Tooling ou IDE.
@@ -575,19 +556,6 @@ Un changement Android doit conserver la compilation iOS au minimum ; un changeme
 7. Mettez à jour la documentation canonique et la section de dette si le contrat évolue.
 
 Les changements à risque élevé sont : allocation/libération native, reconstruction, texte/IME, calcul des offsets UTF-16, scrolling animé, cycle de vie hôte et génération MSBuild.
-
-## 18. Versionnage, release et compatibilité
-
-Le dépôt ne contient actuellement ni tag de release stable, ni package SDK consommable, ni matrice CI multiplateforme formalisée. Jusqu’à V1 :
-
-- considérez le commit Git comme seule version reproductible ;
-- ne promettez pas de compatibilité source ou binaire entre commits ;
-- verrouillez les versions de SkiaSharp/RichTextKit via les projets ;
-- documentez chaque rupture dans la pull request et dans `decisions-v1.md` ;
-- validez Android sur au moins une cible arm64 et un émulateur x64 quand le changement touche le packaging ;
-- validez iOS sur macOS avant toute annonce de compatibilité iOS.
-
-Une release V1 crédible exige au minimum : packages versionnés, SDK installable, templates, changelog, API publique relue, tests CI Android/iOS, politique de support OS/.NET et procédure reproductible de publication.
 
 ## 19. Références suivantes
 

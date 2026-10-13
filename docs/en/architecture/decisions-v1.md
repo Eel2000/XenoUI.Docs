@@ -61,7 +61,7 @@ This document turns the repository audit into explicit decisions. It does not re
 - the text controller validates selection/composition and keeps undo/redo;
 - Android picks a RID from the ABI before build/install;
 - a target that is not online is not launched;
-- `Xeno.SDK` can be consumed outside the repository through a local NuGet feed, without relative imports or source references;
+- `Xeno.SDK` and the runtimes are consumed from nuget.org, without relative imports or source references;
 - generated manifests stay under `obj` and custom files are preserved.
 
 ### Pre-V1 non-guarantees
@@ -72,7 +72,7 @@ This document turns the repository audit into explicit decisions. It does not re
 - complete accessibility;
 - simultaneous multi-window/multi-engine;
 - iOS CLI support;
-- SDK published on nuget.org and a complete IDE/macOS matrix;
+- a complete IDE/macOS matrix and the Visual Studio extension published on the Marketplace;
 - identical behaviour across all IMEs, languages and hardware keyboards;
 - stability of NativeTunnel APIs beyond the current contracts.
 
@@ -80,7 +80,7 @@ This document turns the repository audit into explicit decisions. It does not re
 
 | Priority | Debt/risk | Impact | Closing criterion |
 |---|---|---|---|
-| P0 | publishing and macOS/IDE validation of Xeno.SDK | public distribution not yet available | packed local preview and Android consumer outside the repository validated; finalise the matrix and publish immutable versions |
+| P0 | macOS/IDE validation of Xeno.SDK | preview published on nuget.org, but the IDE/macOS matrix is not validated | `{{ xeno_version }}` published on nuget.org; a fresh application compiled to an Android APK from nuget.org alone (13 October 2026); finalise the matrix and publish the Visual Studio extension |
 | P0 | no CI/validated iOS runtime | fragile cross-platform promise | iOS build + tests + smoke on macOS |
 | P0 | no semantic accessibility | application not inclusive/not publishable | semantic tree tested with TalkBack/VoiceOver |
 | P0 | native APIs/resources and late callbacks | navigation or teardown crash/UAF | generation, dispose and back stress tests |

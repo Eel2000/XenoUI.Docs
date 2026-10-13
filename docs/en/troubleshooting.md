@@ -1,8 +1,8 @@
 # XenoUI troubleshooting by symptom
 
-[Home](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Docs index](index.md) · [Developer guide](developer-guide.md) · [Architecture](architecture/index.md)
+[Docs index](index.md) · [Developer guide](developer-guide.md) · [Architecture](architecture/index.md)
 
-Commands run from the repository root. Always start with the least destructive step; only delete `bin/obj` after capturing the useful error.
+Commands run from your application folder (`MyApp/`). Always start with the least destructive step; only delete `bin/obj` after capturing the useful error.
 
 ## No device shows up
 
@@ -10,7 +10,7 @@ Commands run from the repository root. Always start with the least destructive s
 
 ```powershell
 adb devices -l
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --json
+xeno devices --json
 ```
 
 - If `adb` cannot be found, set `ANDROID_SDK_ROOT`/`ANDROID_HOME` or add `platform-tools` to the `PATH`.
@@ -21,19 +21,15 @@ dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --json
 
 ### The CLI sees the target, Visual Studio does not
 
-- select `SampleApp`, the `net10.0-android` TFM and a deployable configuration;
+- select your XenoUI project, the `net10.0-android` TFM and a deployable configuration;
 - reload the solution after installing the workload;
 - check that the evaluated project exposes `AndroidApplication=true`;
-- confirm that `<Deploy />` exists for the project in `XenoUI.slnx`;
+- confirm that the project is ticked *Deploy* in the solution Configuration Manager;
 - only close old `adb` servers as a last resort, then let the IDE restart it.
 
 ### The CLI sees the target, VS Code does not
 
-- open the root folder that contains the XenoUI `.csproj`;
-- run `XenoUI: Refresh Devices`;
-- check that the extension is installed/enabled;
-- in an external project, install `xeno` or set `xenoui.cliPath`;
-- look at the extension output for the command and its working directory.
+The dedicated VS Code extension is not published yet: launch from the integrated terminal with `xeno run --project MyApp.csproj --device <id>`.
 
 ## `xeno run` says the device is offline or unauthorized
 
@@ -51,7 +47,7 @@ For `unauthorized`, the required action happens on the phone. For `offline`, wai
 The CLI looks for the APK under `bin/<Configuration>/<TFM>/<RID>/` and prefers `<ApplicationId>-Signed.apk`.
 
 ```powershell
-dotnet build samples/SampleApp/SampleApp.csproj `
+dotnet build MyApp.csproj `
   -f net10.0-android -c Debug `
   -p:RuntimeIdentifier=android-arm64
 ```
@@ -65,21 +61,21 @@ Then check:
 
 ## The build cannot find `XenoUI.BuildTasks.dll`
 
-With `Xeno.SDK`, this DLL is embedded in the package under `tools/netstandard2.0`. Check the resolved version and rebuild the local feed:
+With `Xeno.SDK`, this DLL is embedded in the package under `tools/netstandard2.0`. Check the resolved version in `global.json`, then restore and rebuild:
 
 ```powershell
-./tools/Pack-XenoSdk.ps1 -SkipIos
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet restore MyApp.csproj
+dotnet build MyApp.csproj -f net10.0-android
 ```
 
-A path into `bin/Debug` points to the old local imports: migrate to [Xeno.SDK](xeno-sdk.md). Do not delete the whole NuGet cache; consume a new version if the package changed.
+A path into `bin/Debug` points to the old local imports from before `Xeno.SDK`: migrate the project to `<Project Sdk="Xeno.SDK">` ([Xeno.SDK](xeno-sdk.md)). Do not delete the whole NuGet cache.
 
 ## The project is not recognised as a mobile application
 
-Check the SDK, the NuGet feed and the TFM:
+Check the SDK, its version and the TFM:
 
 ```xml
-<Project Sdk="Xeno.SDK/0.1.0-preview.5">
+<Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
     <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
@@ -112,7 +108,7 @@ dotnet msbuild path/to/App.csproj `
 - only keep persistent models (`State`, `ScrollState`, `TextEditController`), declared as fields with `UseState`, `UseScroll`, `UseTextEdit`;
 - do not manually trigger several nested rebuilds from `Body()`;
 - check asynchronous callbacks: a callback from an old tree must be cancelled or version-guarded;
-- run the navigation/rebuild regression and repeat the flow on a device with logs.
+- repeat the flow on a device with `adb logcat` logs.
 
 The engine publishes the old or the new complete tree under the same lock. A crash that observes a mix usually points to an external reference to a stale entity or a late native callback.
 
@@ -186,19 +182,18 @@ When the project has no `Info.plist`, the SDK target currently copies the defaul
 After saving the logs and checking that no useful work lives in the generated folders:
 
 ```powershell
-dotnet clean samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet clean MyApp.csproj -f net10.0-android
 ```
 
 Prefer `dotnet clean` to a broad manual deletion. If you must delete `bin/obj`, target only the project concerned.
 
 ## Information to attach to a bug report
 
-- commit/branch;
+- `Xeno.SDK` version (`global.json`);
 - host OS, `dotnet --info`, `dotnet workload list`;
 - device model/API/ABI or emulator image;
 - exact command and the full relevant output;
 - `xeno devices --json`;
 - platform logs around the crash;
 - minimal reproduction and frequency;
-- result of the two regression executables;
 - video capture for intermittent scrolling, selection or navigation issues.

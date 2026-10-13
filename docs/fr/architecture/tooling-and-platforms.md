@@ -30,7 +30,7 @@ Le CLI ne doit pas être référencé par l’app. NativeTunnel ne doit pas exé
 
 ## 2. Évaluation MSBuild actuelle
 
-Le consommateur utilise `<Project Sdk="Xeno.SDK/0.1.0-preview.5">`, ou une version centralisée dans `global.json`. Le package importe le SDK .NET standard sans dépendre du checkout :
+Le consommateur utilise `<Project Sdk="Xeno.SDK/{{ xeno_version }}">`, ou une version centralisée dans `global.json`. Le package importe le SDK .NET standard sans dépendre du checkout :
 
 1. `Sdk/Sdk.props` avant les propriétés du consommateur ;
 2. propriétés et TFM de l’application ;
@@ -57,12 +57,12 @@ Le consommateur utilise `<Project Sdk="Xeno.SDK/0.1.0-preview.5">`, ou une versi
 
 ### Distribution et validation
 
-- `tools/Pack-XenoSdk.ps1` produit un feed local SDK/runtime aligné ; la preview n'est pas publiée sur nuget.org.
-- `tools/Test-XenoSdk.ps1` vérifie un consommateur hors dépôt, sans `ProjectReference`, et compile un APK Android.
-- Le SampleApp utilise explicitement les références source pour contribuer au runtime ; ce réglage du dépôt n'est pas emballé.
-- Les anciens imports locaux restent disponibles pour compatibilité, pas pour les nouvelles applications.
+- SDK, runtimes, templates et outil sont publiés sur [nuget.org](https://www.nuget.org/packages?q=XenoUI) avec une version unique (`{{ xeno_version }}`) ; une version publiée est immuable.
+- Chaque release est vérifiée avant publication : version, licence, icône, README, commit Source Link et dépendances XenoUI alignées sur la même version.
+- Validé le 13 octobre 2026 : une application créée par `dotnet new xenoui`, restaurée uniquement depuis nuget.org avec un cache NuGet vide, compile un APK Android signé sans avertissement.
+- Les anciens imports locaux d’avant `Xeno.SDK` ne sont plus un parcours supporté pour les nouvelles applications.
 
-Voir [Xeno.SDK](../xeno-sdk.md) pour le bootstrap, les propriétés et les points d'extension. La publication, les templates et la validation IDE/macOS restent des étapes distinctes.
+Voir [Xeno.SDK](../xeno-sdk.md) pour le bootstrap, les propriétés et les points d'extension. La validation IDE/macOS et la publication de l’extension Visual Studio restent des étapes distinctes.
 
 ## 3. Hôte Android
 
@@ -100,7 +100,7 @@ L’architecture doit rester prête pour SceneDelegate/multi-window, mais `Compo
 
 ## 5. CLI `xeno`
 
-`XenoUI.Tooling` est un .NET tool packable (`ToolCommandName=xeno`), mais non publié. Commandes :
+`XenoUI.Tooling` est un .NET tool ([nuget.org](https://www.nuget.org/packages/XenoUI.Tooling), `ToolCommandName=xeno`). Commandes :
 
 ```text
 xeno devices [--json] [--watch]
@@ -153,10 +153,9 @@ sequenceDiagram
 Visual Studio s’appuie d’abord sur MSBuild et les workloads standard. XenoUI expose :
 
 - `ProjectCapability Include="XenoUI"` ;
-- cible Android reconnue et `AndroidApplication=true` ;
-- projet `SampleApp` marqué `<Deploy />` dans `XenoUI.slnx`.
+- cible Android reconnue et `AndroidApplication=true`.
 
-L’extension `tools/visualstudio/XenoUI.VisualStudio` (VisualStudio.Extensibility, hors processus) ajoute la fenêtre **XenoUI Preview**. Elle délègue tout calcul à `XenoUI.PreviewServer`, un processus .NET 10 dédié qu’elle démarre, surveille et relance : compilation Roslyn en mémoire des sources du projet, `AssemblyLoadContext` collectible, rendu headless par `XenoUI.Core.Preview.PreviewRenderer`, protocole JSON une ligne par message sur stdin/stdout. Le serveur n’évalue pas MSBuild, ne construit pas le projet et n’exécute que les membres `[Preview]`. Voir [Visual Studio](../visual-studio.md).
+L’extension **XenoUI Preview** (VisualStudio.Extensibility, hors processus, bientôt sur le Visual Studio Marketplace) ajoute la fenêtre **XenoUI Preview**. Elle délègue tout calcul à `XenoUI.PreviewServer`, un processus .NET 10 dédié qu’elle démarre, surveille et relance : compilation Roslyn en mémoire des sources du projet, `AssemblyLoadContext` collectible, rendu headless par `XenoUI.Core.Preview.PreviewRenderer`, protocole JSON une ligne par message sur stdin/stdout. Le serveur n’évalue pas MSBuild, ne construit pas le projet et n’exécute que les membres `[Preview]`. Voir [Visual Studio](../visual-studio.md).
 
 Les templates `XenoUI.Templates` (`xenoui`, `xenoui-page`, `xenoui-component`) sont des templates `dotnet new` ; Visual Studio les affiche via `ide.host.json`.
 
@@ -166,23 +165,9 @@ Conséquence : un appareil visible par `xeno devices` valide ADB, mais pas autom
 
 ## 7. VS Code
 
-`tools/vscode-xenoui` fournit une extension légère :
+Une extension VS Code dédiée est en prototype et n’est pas publiée. Aujourd’hui, VS Code avec C# Dev Kit construit le projet et `xeno run` lance l’application depuis le terminal intégré.
 
-- activation uniquement dans un workspace XenoUI Android ;
-- status bar cible ;
-- refresh périodique ;
-- Quick Pick de sélection ;
-- commande run déléguée au CLI.
-
-Dans le monorepo, l’extension peut utiliser :
-
-```text
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- ...
-```
-
-Dans un projet consommateur, elle résout `xenoui.cliPath` ou `xeno` dans le `PATH`. L’extension doit traiter stdout JSON comme donnée non fiable : erreur de parsing, version incompatible et process interrompu doivent produire un message actionnable.
-
-La fréquence de refresh ne doit pas créer plusieurs processus concurrents ni monopoliser ADB. Une future version devrait utiliser `xeno devices --watch` avec un process long-lived correctement arrêté à la désactivation.
+Contrat visé pour l’extension : activation uniquement dans un workspace XenoUI Android, cible dans la barre de statut, sélection par Quick Pick et lancement délégué au CLI `xeno` (résolu via `xenoui.cliPath` ou le `PATH`), sans dupliquer la logique ADB/build. Elle devra traiter le JSON de `xeno devices --json` comme une donnée non fiable (erreur de parsing, version incompatible, processus interrompu → message actionnable) et utiliser `xeno devices --watch` avec un seul processus long, arrêté à la désactivation, plutôt que des sondages concurrents.
 
 ## 8. Assets et manifests
 
@@ -227,4 +212,4 @@ xeno devices
 xeno run --project MyApp/MyApp.csproj --device <id>
 ```
 
-`dotnet new xenoui` existe désormais en preview locale (voir [Visual Studio](../visual-studio.md)) ; le reste de ce bloc décrit la cible de design, pas des commandes publiées aujourd’hui. La release doit publier SDK/runtime/tool/template avec une même version et une matrice de compatibilité explicite.
+Ces commandes fonctionnent dès la preview `{{ xeno_version }}` publiée sur nuget.org (voir [Installation](../installation.md)). Il reste à publier une matrice de compatibilité explicite et à ajouter le provider iOS.

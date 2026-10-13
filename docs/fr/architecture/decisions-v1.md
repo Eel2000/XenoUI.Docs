@@ -61,7 +61,7 @@ Ce document transforme l’audit du dépôt en décisions explicites. Il ne remp
 - le contrôleur texte valide sélection/composition et conserve undo/redo ;
 - Android choisit un RID selon ABI avant build/install ;
 - une cible non online n’est pas lancée.
-- `Xeno.SDK` se consomme hors dépôt via un feed NuGet local, sans imports relatifs ni références source ;
+- `Xeno.SDK` et les runtimes se consomment depuis nuget.org, sans imports relatifs ni références source ;
 - les manifests générés restent sous `obj` et les fichiers personnalisés sont préservés.
 
 ### Non-garanties pré-V1
@@ -72,7 +72,7 @@ Ce document transforme l’audit du dépôt en décisions explicites. Il ne remp
 - accessibilité complète ;
 - multi-window/multi-engine simultané ;
 - support CLI iOS ;
-- SDK publié sur nuget.org et matrice IDE/macOS complète ;
+- matrice IDE/macOS complète et extension Visual Studio publiée sur le Marketplace ;
 - comportement identique sur tous IME, langues et claviers matériels ;
 - stabilité des API NativeTunnel au-delà des contrats actuels.
 
@@ -80,7 +80,7 @@ Ce document transforme l’audit du dépôt en décisions explicites. Il ne remp
 
 | Priorité | Dette/risque | Impact | Critère de fermeture |
 |---|---|---|---|
-| P0 | publication et validation macOS/IDE de Xeno.SDK | distribution publique pas encore disponible | preview locale packagée et consommateur Android hors dépôt validés ; finaliser la matrice et publier des versions immuables |
+| P0 | validation macOS/IDE de Xeno.SDK | preview publiée sur nuget.org, mais matrice IDE/macOS non validée | `{{ xeno_version }}` publiée sur nuget.org ; application neuve compilée en APK Android depuis nuget.org seul (13 octobre 2026) ; finaliser la matrice et publier l’extension Visual Studio |
 | P0 | absence CI/runtime iOS validé | promesse multiplateforme fragile | build + tests + smoke iOS macOS |
 | P0 | accessibilité sémantique absente | application non inclusive/non publiable | arbre sémantique TalkBack/VoiceOver testé |
 | P0 | APIs/ressources natives et callbacks tardifs | crash/UAF navigation ou teardown | tests génération, dispose et stress back |

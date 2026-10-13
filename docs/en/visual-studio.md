@@ -7,32 +7,28 @@ XenoUI provides two things for Visual Studio:
 - **`dotnet new` templates**, visible in *Create a new project* and *Add › New Item*: "XenoUI App", "XenoUI Page" and "XenoUI Component";
 - **the XenoUI Preview extension**: a tool window that shows, as you type, the components and pages marked `[Preview]`, like Compose previews in Android Studio. It does not compile the project through MSBuild and launches neither the application nor an emulator.
 
-> **Status: local preview `0.1.0-preview.5`.** Nothing is published on nuget.org or on the Marketplace. Prerequisites: Visual Studio 2022 17.14 or Visual Studio 2026, and the .NET 10 runtime (installed with the .NET 10 SDK) for the render server. Templates, in-memory compilation and rendering are covered by tests; the window's display in the IDE still has to be validated before publishing.
+> **Status: `{{ xeno_version }}`.** The templates are published on [nuget.org](https://www.nuget.org/packages/XenoUI.Templates); the XenoUI Preview extension is coming soon to the Visual Studio Marketplace. Prerequisites: Visual Studio 2022 17.14 or Visual Studio 2026, and the .NET 10 runtime (installed with the .NET 10 SDK) for the render server.
 
 ## Installing
 
-In short, from the repository root:
-
 ```powershell
-./tools/Pack-XenoSdk.ps1 -IncludeMedia -IncludeVisualStudio
-dotnet new install ./artifacts/packages/XenoUI.Templates.0.1.0-preview.5.nupkg
+dotnet new install XenoUI.Templates::{{ xeno_version }}
 ```
 
-Then, with Visual Studio closed, double-click `artifacts/visualstudio/XenoUI.VisualStudio.0.1.0-preview.5.vsix`. The templates show up in Visual Studio on the next start.
+The templates show up in Visual Studio on the next start. The XenoUI Preview extension will install from *Extensions › Manage Extensions* as soon as it is published on the Marketplace.
 
-Prerequisites, installation from nuget.org, command-line `VSIXInstaller`, update, uninstall and troubleshooting: [installation guide](installation.md#7-installing-the-previewer-visual-studio-extension).
+Prerequisites, update, uninstall and troubleshooting: [installation guide](installation.md#6-the-previewer-visual-studio-extension).
 
 ## Creating a project
 
 In Visual Studio: *Create a new project* › "XenoUI" filter › **XenoUI App**. From the command line:
 
 ```powershell
-dotnet new xenoui -n MyApp --feed D:/path/XenoUI/artifacts/packages
+dotnet new xenoui -n MyApp
 ```
 
 | Option | Effect |
 |---|---|
-| `--feed <folder>` | Generates a `NuGet.config` that adds the local feed; required as long as the SDK is not published |
 | `--ios` | Adds `net10.0-ios` (iOS workload required; building the app requires macOS and Xcode) |
 | `--appId com.example.myapp` | Android/iOS identifier; defaults to `com.companyname.<name>` |
 | `--sdkVersion <version>` | `Xeno.SDK` version pinned in `global.json`; defaults to the template pack's version |
@@ -135,23 +131,15 @@ flowchart LR
 - **The extension** is *out-of-process* (VisualStudio.Extensibility): it never runs inside `devenv.exe`.
 - **The render server** is a separate process owned by the extension. It reads the `.csproj` without evaluating MSBuild, compiles the project's shared sources in memory with Roslyn (excluding `bin`, `obj`, `Platforms/`) with the `Xeno.SDK` implicit usings and the framework's source generators, embeds the assets, loads the assembly into a collectible context, renders each preview with `PreviewRenderer`, then unloads everything.
 - **Project runtime**: previews are compiled and rendered with the same XenoUI version as the project, never with a copy frozen in the extension:
-  1. project inside a XenoUI clone (SampleApp, a contributor): `XenoUI.Core`, `StandardLibrary` and `Media` are compiled in memory from the clone's sources, then cached as long as no file changes; a new framework API is therefore visible without a build;
-  2. otherwise, the packages of the project's `Xeno.SDK` version (`Sdk="Xeno.SDK/x"` or `global.json`), read from the NuGet cache;
+  1. project inside the XenoUI sources (framework contributors): `XenoUI.Core`, `StandardLibrary` and `Media` are compiled in memory from those sources, then cached as long as no file changes;
+  2. otherwise, the packages of the project's `Xeno.SDK` version (`Sdk="Xeno.SDK/x"` or `global.json`), read from the NuGet cache after restore;
   3. failing that (project never restored), the runtime embedded in the extension, with a warning in the window: run a build or `dotnet restore`.
 
   The runtime in use is shown in the status line. Like the build, compilation uses C# 14 and the reference assemblies of the dependencies (SkiaSharp, RichTextKit).
 - **Lightweight**: low priority, non-concurrent workstation GC, `ConserveMemory`, 768 MB heap cap, single-core Roslyn compilation, no activity when idle (blocking read on stdin). A request identical to the previous one answers in a few tens of milliseconds without recompiling. The server stops by itself after 15 minutes of inactivity or when the extension host ends, and restarts on demand.
 - **Robust**: a preview that runs longer than 10 s (infinite loop) stops the server; a crash or a missing response after 45 s is reported in the window and the server is restarted on the next change. The IDE is never affected.
 
-Orders of magnitude measured on SampleApp (development machine, Release): first render ~13 s when the runtime is compiled from the clone's sources, ~5 s from the packages; then ~1.6 s of compilation and ~0.7 s of rendering per change; ~150 MB of working set.
-
-Diagnosing without Visual Studio:
-
-```powershell
-dotnet tools/visualstudio/XenoUI.PreviewServer/bin/Release/net10.0/XenoUI.PreviewServer.dll --render samples/SampleApp/Design/Ui.cs --out ./preview-out
-```
-
-The command prints the JSON response and keeps the PNGs in `--out`.
+Orders of magnitude measured (development machine, Release): first render ~5 s; then ~1.6 s of compilation and ~0.7 s of rendering per change; ~150 MB of working set.
 
 ## Limits
 

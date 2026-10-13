@@ -8,7 +8,7 @@ Checkpoint du 6 octobre 2026 : socle portable et adaptateur **audio/vidéo foreg
 
 Dans une application Xeno.SDK, `XenoEnableMedia=true` ajoute le module portable et, sur Android uniquement, `XenoUI.Media.Android`. L’Activity générée enregistre la capability avant `OnStart`. Une Activity personnalisée doit fournir cette registration via l’overload `XenoView(context, configureNative)` et relayer `HandleForeground`/`HandleBackground`, puis appeler `Shutdown()` à la destruction. Cette méthode arrête le thread GL et libère le runtime une seule fois, sans disposer prématurément le peer Java encore détenu par la fenêtre ; ne pas appeler `view.Dispose()` depuis `Activity.OnDestroy`. Aucun service Android ni autorisation background n’est ajouté. iOS reste sans capability native à ce checkpoint.
 
-Le mode source utilise les projets du dépôt ; le mode package nécessite de publier les deux modules avec la même version que le runtime SDK. Pour créer le feed **local** optionnel : `./tools/Pack-XenoSdk.ps1 -SkipIos -IncludeMedia`. Un SDK déjà installé n’est pas modifié par la seule édition du dépôt : réempaqueter et utiliser un cache d’évaluation neuf ou une nouvelle version avant de tester ses nouveaux targets.
+Les deux modules, [`XenoUI.Media`](https://www.nuget.org/packages/XenoUI.Media) et [`XenoUI.Media.Android`](https://www.nuget.org/packages/XenoUI.Media.Android), sont publiés sur nuget.org avec la même version que `Xeno.SDK` ; le SDK les référence automatiquement quand la propriété est activée.
 
 ```xml
 <PropertyGroup>
@@ -77,13 +77,7 @@ Le contrôleur ne publie pas encore de slab ECS. Ne pas le lire directement depu
 
 Le contrat natif exige des snapshots cohérents, des commandes sur le thread approprié, des révisions capturées à l’origine de l’opération asynchrone et une destruction annulant les callbacks. L’adaptateur Android n’achemine aucun résultat asynchrone d’un ancien item : il arrête/retire la source précédente, puis lit l’état courant du player sur son thread propriétaire. `Stop` et `Dispose` sont directs et ne passent pas par une file susceptible de les perdre. Les leases et transports d’images vidéo restent à implémenter.
 
-## Vérification reproductible
-
-```powershell
-dotnet run --project tests/XenoUI.Media.RegressionTests -c Release -p:NuGetAudit=false
-dotnet run --project tests/XenoUI.Core.RegressionTests -c Release --no-restore
-./tests/XenoUI.Media.RegressionTests/TestSdkReferences.ps1
-```
+## Validation
 
 Résultats du checkpoint : 23/23 média, 122/122 Core, huit évaluations SDK et build SampleApp Android sans warning ni erreur. Après warm-up, la boucle de 100 000 synchronisations/lectures de snapshots avec backend simulé alloue 0 octet managé sur son thread. Ce test ne démontre pas zéro allocation des lecteurs natifs, du pump, des labels réactifs ou de la publication native d’un commit de navigation. Les interruptions physiques, le background-service, iOS et le benchmark complet restent à réaliser.
 

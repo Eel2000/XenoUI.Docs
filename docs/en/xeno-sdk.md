@@ -1,47 +1,32 @@
-# Xeno.SDK — creating and distributing an application
+# Xeno.SDK — creating and configuring an application
 
-[Documentation](index.md) · [Developer guide](developer-guide.md) · [Tooling architecture](architecture/tooling-and-platforms.md)
+[Documentation](index.md) · [Installation](installation.md) · [Developer guide](developer-guide.md) · [Tooling architecture](architecture/tooling-and-platforms.md)
 
-`Xeno.SDK` is an MSBuild SDK distributed as a NuGet package. It imports `Microsoft.NET.Sdk`, references the runtime packages matching the platform, provides the native entry points and embeds the assets. No import relative to the repository is needed in a consuming project.
+[`Xeno.SDK`](https://www.nuget.org/packages/Xeno.SDK) is an MSBuild SDK distributed on nuget.org. It imports `Microsoft.NET.Sdk`, references the runtime packages matching the platform, provides the native entry points and embeds the assets.
 
 ## Status and prerequisites
 
-Local preview: `0.1.0-preview.5`. No package is published on nuget.org yet. You need .NET 10 and the workload of the targeted platform. The SDK does not silently download a workload, the Android SDK or Xcode. Building/signing/running an iOS application always requires macOS and Xcode; producing an iOS library or evaluating its project on Windows is not a validation of the iOS application.
+Current version: `{{ xeno_version }}`, published on nuget.org. You need .NET 10 and the workload of the targeted platform. The SDK does not silently download a workload, the Android SDK or Xcode. Building/signing/running an iOS application always requires macOS and Xcode; evaluating an iOS project on Windows is not a validation of the iOS application.
 
-## Producing the local feed
+All published packages share the same version:
 
-From the repository root, with PowerShell:
+| Package | Content |
+|---|---|
+| `Xeno.SDK` | MSBuild SDK: properties, targets, entry points, build task |
+| `XenoUI.Core`, `XenoUI.StandardLibrary` | Portable runtime |
+| `XenoUI.Platforms` | Android and iOS native hosts in a single multi-target package (`lib/net10.0-android`, `lib/net10.0-ios`); NuGet picks the one for the application's TFM |
+| `XenoUI.Media`, `XenoUI.Media.Android` | Optional media module (`XenoEnableMedia`) |
+| `XenoUI.Templates` | `dotnet new` / Visual Studio templates |
+| `XenoUI.Tooling` | The `xeno` .NET tool |
 
-```powershell
-./tools/Pack-XenoSdk.ps1
-# Android-only machine, without the iOS workload:
-./tools/Pack-XenoSdk.ps1 -SkipIos
-```
+A published version is immutable: a fix always carries a new version number.
 
-The script produces in `artifacts/packages`: `Xeno.SDK`, `XenoUI.Core`, `XenoUI.StandardLibrary`, `XenoUI.Platforms` and `XenoUI.Templates`. `XenoUI.Platforms` groups the native hosts into a single multi-target package (`lib/net10.0-android` and `lib/net10.0-ios`); NuGet picks the one for the application's TFM. With `-SkipIos`, it only contains the Android target. Runtimes, SDK and templates share the same version. The MSBuild task is embedded in the SDK package, not in the application's dependencies. The repository's existing licence is kept in the packages.
+## Using the SDK
 
-For another version: `-Version 0.1.0-preview.6`. Do not reuse a version already distributed: NuGet caches treat packages as immutable. Change the version consumed in the project or in `global.json`. A global NuGet cache must not be deleted to update the SDK.
-
-## Consuming outside the repository
-
-The simplest way is the `dotnet new xenoui --feed <feed>` template, which generates `global.json` and `NuGet.config`: see the [installation guide](installation.md#5-creating-an-application-and-using-the-sdk). By hand:
-
-Add the absolute path of your local feed to the new project's `NuGet.Config`, keeping the sources needed for SkiaSharp and the other dependencies:
+The simplest way is the `dotnet new xenoui` template, which generates the project and `global.json`: see the [installation guide](installation.md#4-creating-an-application-and-using-the-sdk). By hand, create `MyApp.csproj`:
 
 ```xml
-<configuration>
-  <packageSources>
-    <clear />
-    <add key="xeno-local" value="D:/path/XenoUI/artifacts/packages" />
-    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-  </packageSources>
-</configuration>
-```
-
-Create `MyApp.csproj`:
-
-```xml
-<Project Sdk="Xeno.SDK/0.1.0-preview.5">
+<Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
     <TargetFramework>net10.0-android</TargetFramework>
     <XenoAppId>com.example.myapp</XenoAppId>
@@ -52,15 +37,17 @@ Create `MyApp.csproj`:
 </Project>
 ```
 
-For Android and iOS: `TargetFrameworks=net10.0-android;net10.0-ios`, with the matching workloads/packages available. The SDK version can also be centralised in `global.json`:
+For Android and iOS: `TargetFrameworks=net10.0-android;net10.0-ios`, with the matching workloads installed. The SDK version can also be centralised in `global.json`:
 
 ```json
-{ "msbuild-sdks": { "Xeno.SDK": "0.1.0-preview.5" } }
+{ "msbuild-sdks": { "Xeno.SDK": "{{ xeno_version }}" } }
 ```
 
-In that case use `<Project Sdk="Xeno.SDK">`, without repeating the version. Do not add `Xeno.SDK` as a plain `PackageReference`: the SDK takes part from the project evaluation onwards.
+In that case use `<Project Sdk="Xeno.SDK">`, without repeating the version. Do not add `Xeno.SDK` as a plain `PackageReference`: the SDK takes part from the project evaluation onwards. No `NuGet.config` is needed: the default nuget.org source provides the SDK, the runtimes, SkiaSharp and the other dependencies.
 
 Add your `XenoApp`, your `XenoPage`s and `Assets/`, then `dotnet restore` and `dotnet build -f net10.0-android`. The identifier, versions and signing options remain the application's responsibility.
+
+To move to a new version, change `global.json` (or the `Sdk` attribute) then run `dotnet restore`. Do not delete the global NuGet cache to update the SDK.
 
 ## Configuration and extensions
 
@@ -74,7 +61,6 @@ Add your `XenoApp`, your `XenoPage`s and `Assets/`, then `dotnet restore` and `d
 | `XenoEnableDefaultAssets` | `true` | Automatic collection of `Assets/**/*` |
 | `XenoEnableImplicitUsings` | `true` | XenoUI imports and factories; can be disabled without touching the references |
 | `XenoEnableMedia` | `false` | Optional media module; foreground audio and reference Media3 native video output on Android. See the [capabilities and limits](media-controller.md). |
-| `XenoUseProjectReferences` | `false` | Explicit contributor mode; requires `XenoSourceRoot` |
 
 Explicitly set native properties, notably `ApplicationId`, `ApplicationTitle` and `SupportedOSPlatformVersion`, take precedence. In a multi-target project, condition the overrides on the TFM. Your other `PackageReference`s, C# components and NativeTunnel extensions remain free: the SDK does not impose a closed list of controls.
 
@@ -97,25 +83,14 @@ Android accepts a short name (`CAMERA`) or the qualified name and adds `uses-per
 
 An `AndroidManifest.xml` and `Info.plist` supplied by the application take precedence, or can be selected through `AndroidManifest` and `AppBundleManifest`. When a merge is needed, it produces a derived file in `obj` and never modifies the source file. Without a custom plist, the SDK generates its default in `obj`. Android receives project-relative paths, as its workload expects. The generation tasks do not run in `DesignTimeBuild`.
 
-When you use `XenoPermission`, declare custom manifest paths in the `.csproj`, not with `-p:AndroidManifest=...` or `-p:AppBundleManifest=...`: these MSBuild global properties would lock the source path and prevent its replacement by the merged derived file. The verifier covers project properties.
+When you use `XenoPermission`, declare custom manifest paths in the `.csproj`, not with `-p:AndroidManifest=...` or `-p:AppBundleManifest=...`: these MSBuild global properties would lock the source path and prevent its replacement by the merged derived file.
 
-## Developing the framework with SampleApp
-
-SampleApp uses `<Project Sdk="Xeno.SDK">`. The repository's `Directory.Build.props` enables `XenoUseProjectReferences=true` for this project only and sets `XenoSourceRoot`. This mode lets you test runtime changes immediately without republishing its DLLs. It is not packed into the SDK and never applies to a consumer outside the repository.
-
-To check SampleApp as a NuGet consumer: add `-p:XenoUseProjectReferences=false` to the restore/build commands and use the aligned packages from the feed. After changing SDK files or packed native entry points, produce a new SDK version and update `global.json`; source mode does not bypass the SDK cache.
-
-The old `Sdk.props`/`Sdk.targets` at the root are kept temporarily for older consumers. They are no longer the official path and are not included in `Xeno.SDK`.
-
-## Reproducible verification
+## Checking a project
 
 ```powershell
-./tools/Pack-XenoSdk.ps1
-./tools/Test-XenoSdk.ps1
-# Evaluation only, without compiling an APK:
-./tools/Test-XenoSdk.ps1 -SkipAndroidBuild
+dotnet msbuild MyApp.csproj -p:TargetFramework=net10.0-android `
+  -getProperty:ApplicationId -getProperty:AndroidApplication
+dotnet build MyApp.csproj -f net10.0-android
 ```
 
-The verifier creates an application in the system temporary folder **outside the checkout**, with a NuGet cache isolated from its sources. It checks that there is no `ProjectReference`, the versions, the design-time properties, the Android/iOS selection, disabling the native entry point, assets and manifests. It compiles a Release Android APK without AOT/trimming to isolate packaging risks. The `-SkipIos`/`-SkipAndroidBuild` parameters explicitly narrow the scope.
-
-The consumer is kept for inspection, and the result is written to `artifacts/xeno-sdk-verification.json`. These artefacts are not versioned. Having an MSBuild SDK does not by itself guarantee an IDE's device picker or debugger: that part stays in [tooling](architecture/tooling-and-platforms.md).
+Having an MSBuild SDK does not by itself guarantee an IDE's device picker or debugger: to launch on a device, use `xeno run` ([installation](installation.md#5-installing-the-xeno-tool)) or your IDE's Android tools; see also [tooling](architecture/tooling-and-platforms.md).

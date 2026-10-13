@@ -83,24 +83,7 @@ Cet instantané inclut runtime, JIT, surfaces, caches et ressources du banc. Ce 
 
 ## 5. Reproduction
 
-Depuis la racine du dépôt :
-
-```powershell
-dotnet build tests/XenoUI.Android.Benchmarks -c Release -t:Rebuild -p:NuGetAudit=false
-android run --device=R58X70F8NPN --apks=tests/XenoUI.Android.Benchmarks/bin/Release/net10.0-android/android-arm64/com.xenoui.benchmarks-Signed.apk --install-options=-r,-g
-```
-
-Attendre le log `XenoBenchmark: GL_COMPLETE`. Le banc écrit `runtime-benchmark.json` et `gl-benchmark.json` dans `/sdcard/Android/data/com.xenoui.benchmarks/files/`, récupérables par `adb pull`. Les résultats du run sont également conservés localement dans `artifacts/a15-runtime-benchmark.json` et `artifacts/a15-gl-benchmark.json` (fichiers ignorés par Git).
-
-Pour le démarrage :
-
-```powershell
-dotnet build samples/SampleApp/SampleApp.csproj -c Release -f net10.0-android -t:Rebuild -p:RunAOTCompilation=false -p:AndroidEnableProfiledAot=false -p:PublishTrimmed=false -p:AndroidPackageFormats=apk
-android run --device=R58X70F8NPN --apks=samples/SampleApp/bin/Release/net10.0-android/com.xenoui.sample-Signed.apk --install-options=-r,-g
-./tools/benchmarks/Measure-AndroidStartup.ps1 -Adb '<chemin absolu vers adb.exe>' -Device R58X70F8NPN -Samples 10
-```
-
-Résultat brut : `artifacts/a15-startup.json`. `-Reprocess` recalcule ses statistiques à partir des sorties Android conservées sans solliciter le téléphone.
+Les bancs de mesure (`XenoUI.Android.Benchmarks` et le script de démarrage) font partie des sources du framework et ne sont pas distribués. Le banc écrit `runtime-benchmark.json` et `gl-benchmark.json` sur l’appareil, dans `/sdcard/Android/data/com.xenoui.benchmarks/files/` ; les démarrages sont mesurés avec `am start -W` comme décrit au § 3.
 
 ## 6. Correction des allocations — nouvelle série A15
 
@@ -126,7 +109,7 @@ Sur la nouvelle série GL : rendu stable p95 1,626 ms, navigation p95 8,602 ms, 
 
 La suite Core passe **100/100** tests Release, avec nouveaux tests de mesure de texte répétée et de matérialisation de fenêtres disjointes à libellé constant. Builds Android du benchmark et de SampleApp : zéro warning, zéro erreur. Un premier packaging incrémental du benchmark a échoué en JNI avant d'exécuter le moteur ; une reconstruction complète a permis le run retenu. Aucun chiffre de cette tentative échouée n'est retenu.
 
-Données locales conservées séparément : `artifacts/a15-runtime-after-allocation-fix.json` et `artifacts/a15-gl-after-allocation-fix.json`. La baseline précédente n'est pas écrasée.
+json`. La baseline précédente n'est pas écrasée.
 
 SampleApp corrigée reconstruite intégralement et réinstallée sur l'A15 : Home → Runtime Lab, liste verticale passée aux batches 6–9 et liste horizontale aux chips 6–9, affichage vérifié par captures. Le PID testé est resté vivant sans erreur AndroidRuntime dans son log filtré. Son premier package incrémental avait aussi échoué en JNI avant `OnCreate` ; le run fonctionnel utilise le package reconstruit, pas ce package défaillant. Ce smoke test n'est pas une mesure d'allocation des items complexes de SampleApp.
 
@@ -162,16 +145,7 @@ Le maximum de 26,749 ms et l'intervalle maximal entre callbacks de 31,448 ms dan
 
 Le compteur global approximatif renvoie 0 pour le scroll malgré 216 040 B comptés sur le thread, et 13 255 208 B pour les sauts. Il est donc insuffisamment précis sur ces fenêtres pour quantifier les allocations hors `Refresh` ; ses zéros ne signifient pas absence d'allocation du processus. Il reste un diagnostic brut, pas une métrique d'acceptation.
 
-État thermique Android 3 avant/pendant, 2 après ; relevés finaux AP 45,5 °C et SKIN 41,9 °C, toujours en charge USB. Une seule série, appareil chaud. Le banc a été arrêté après récupération du rapport, puis SampleApp remise au premier plan. Aucune erreur AndroidRuntime du PID du banc dans le log consulté. Données locales : `artifacts/a15-gc-stress.json`.
-
-Reproduction après reconstruction/installation du benchmark :
-
-```powershell
-adb -s R58X70F8NPN shell am force-stop com.xenoui.benchmarks
-adb -s R58X70F8NPN shell am start -W -n com.xenoui.benchmarks/com.xenoui.benchmarks.MainActivity --ez gc-stress true
-# Attendre XenoBenchmark: GC_COMPLETE, puis récupérer le rapport.
-adb -s R58X70F8NPN pull /sdcard/Android/data/com.xenoui.benchmarks/files/gc-stress.json artifacts/a15-gc-stress.json
-```
+État thermique Android 3 avant/pendant, 2 après ; relevés finaux AP 45,5 °C et SKIN 41,9 °C, toujours en charge USB. Une seule série, appareil chaud. Le banc a été arrêté après récupération du rapport, puis SampleApp remise au premier plan. Aucune erreur AndroidRuntime du PID du banc dans le log consulté.
 
 ## Conclusion
 

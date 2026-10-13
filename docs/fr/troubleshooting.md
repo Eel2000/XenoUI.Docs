@@ -1,8 +1,8 @@
 # Dépannage XenoUI par symptôme
 
-[Accueil](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Index docs](index.md) · [Guide développeur](developer-guide.md) · [Architecture](architecture/index.md)
+[Index docs](index.md) · [Guide développeur](developer-guide.md) · [Architecture](architecture/index.md)
 
-Les commandes partent de la racine du dépôt. Commencez toujours par l’étape la moins destructive ; ne supprimez `bin/obj` qu’après avoir capturé l’erreur utile.
+Les commandes partent du dossier de votre application (`MyApp/`). Commencez toujours par l’étape la moins destructive ; ne supprimez `bin/obj` qu’après avoir capturé l’erreur utile.
 
 ## Aucun appareil n’apparaît
 
@@ -10,7 +10,7 @@ Les commandes partent de la racine du dépôt. Commencez toujours par l’étape
 
 ```powershell
 adb devices -l
-dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --json
+xeno devices --json
 ```
 
 - Si `adb` est introuvable, configurez `ANDROID_SDK_ROOT`/`ANDROID_HOME` ou ajoutez `platform-tools` au `PATH`.
@@ -21,19 +21,15 @@ dotnet run --project XenoUI.Tooling/XenoUI.Tooling.csproj -- devices --json
 
 ### Le CLI voit la cible, pas Visual Studio
 
-- sélectionnez `SampleApp`, le TFM `net10.0-android` et une configuration déployable ;
+- sélectionnez votre projet XenoUI, le TFM `net10.0-android` et une configuration déployable ;
 - rechargez la solution après installation du workload ;
 - vérifiez que le projet évalué expose `AndroidApplication=true` ;
-- confirmez que `<Deploy />` existe pour le projet dans `XenoUI.slnx` ;
+- confirmez que le projet est coché *Déployer* dans le Gestionnaire de configurations de la solution ;
 - fermez les anciens serveurs `adb` seulement en dernier recours, puis laissez l’IDE le redémarrer.
 
 ### Le CLI voit la cible, pas VS Code
 
-- ouvrez la racine contenant le `.csproj` XenoUI ;
-- lancez `XenoUI: Refresh Devices` ;
-- vérifiez que l’extension est installée/activée ;
-- dans un projet externe, installez `xeno` ou configurez `xenoui.cliPath` ;
-- consultez la sortie de l’extension pour la commande et son répertoire de travail.
+L’extension VS Code dédiée n’est pas encore publiée : lancez depuis le terminal intégré avec `xeno run --project MyApp.csproj --device <id>`.
 
 ## `xeno run` dit que l’appareil est offline ou unauthorized
 
@@ -51,7 +47,7 @@ Pour `unauthorized`, l’action nécessaire se fait sur le téléphone. Pour `of
 Le CLI recherche l’APK sous `bin/<Configuration>/<TFM>/<RID>/` et préfère `<ApplicationId>-Signed.apk`.
 
 ```powershell
-dotnet build samples/SampleApp/SampleApp.csproj `
+dotnet build MyApp.csproj `
   -f net10.0-android -c Debug `
   -p:RuntimeIdentifier=android-arm64
 ```
@@ -65,21 +61,21 @@ Vérifiez ensuite :
 
 ## Le build ne trouve pas `XenoUI.BuildTasks.dll`
 
-Avec `Xeno.SDK`, cette DLL est embarquée dans le package sous `tools/netstandard2.0`. Vérifiez la version résolue et reconstruisez le feed local :
+Avec `Xeno.SDK`, cette DLL est embarquée dans le package sous `tools/netstandard2.0`. Vérifiez la version résolue dans `global.json`, puis restaurez et reconstruisez :
 
 ```powershell
-./tools/Pack-XenoSdk.ps1 -SkipIos
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet restore MyApp.csproj
+dotnet build MyApp.csproj -f net10.0-android
 ```
 
-Un chemin vers `bin/Debug` indique les anciens imports locaux : migrez vers [Xeno.SDK](xeno-sdk.md). Ne supprimez pas tout le cache NuGet ; consommez une nouvelle version si le package a changé.
+Un chemin vers `bin/Debug` indique les anciens imports locaux d’avant `Xeno.SDK` : migrez le projet vers `<Project Sdk="Xeno.SDK">` ([Xeno.SDK](xeno-sdk.md)). Ne supprimez pas tout le cache NuGet.
 
 ## Le projet n’est pas reconnu comme application mobile
 
-Contrôlez le SDK, le feed NuGet et le TFM :
+Contrôlez le SDK, sa version et le TFM :
 
 ```xml
-<Project Sdk="Xeno.SDK/0.1.0-preview.5">
+<Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
     <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
@@ -112,7 +108,7 @@ dotnet msbuild path/to/App.csproj `
 - conservez uniquement les modèles persistants (`State`, `ScrollState`, `TextEditController`), déclarés en champs avec `UseState`, `UseScroll`, `UseTextEdit` ;
 - ne déclenchez pas manuellement plusieurs reconstructions imbriquées depuis `Body()` ;
 - vérifiez les callbacks asynchrones : une callback d’un ancien arbre doit être annulée ou version-guarded ;
-- lancez la régression navigation/rebuild et répétez le parcours sur appareil avec logs.
+- répétez le parcours sur appareil avec les logs `adb logcat`.
 
 Le moteur publie l’ancien ou le nouvel arbre complet sous le même verrou. Un crash qui observe un mélange pointe généralement vers une référence externe à une entité périmée ou une callback native tardive.
 
@@ -186,19 +182,18 @@ Lorsque le projet n’a pas de `Info.plist`, la cible SDK copie actuellement le 
 Après avoir sauvegardé les logs et vérifié qu’aucun travail utile ne réside dans les dossiers générés :
 
 ```powershell
-dotnet clean samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet clean MyApp.csproj -f net10.0-android
 ```
 
 Préférez `dotnet clean` à une suppression manuelle large. Si vous devez supprimer `bin/obj`, ciblez uniquement le projet concerné.
 
 ## Informations à joindre à un bug
 
-- commit/branche ;
+- version de `Xeno.SDK` (`global.json`) ;
 - OS hôte, `dotnet --info`, `dotnet workload list` ;
 - modèle/API/ABI de l’appareil ou image d’émulateur ;
 - commande exacte et sortie complète pertinente ;
 - `xeno devices --json` ;
 - logs plateforme autour du crash ;
 - reproduction minimale et fréquence ;
-- résultat des deux exécutables de régression ;
 - capture vidéo pour scrolling, sélection ou navigation intermittente.

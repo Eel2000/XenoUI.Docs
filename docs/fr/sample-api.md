@@ -30,13 +30,6 @@ Le réseau et la désérialisation ne s'exécutent ni dans `Body()` ni dans les 
 
 Pas de SQLite, de cache disque, de favoris persistants, de synchronisation ou de garantie offline dans cette étape. Une relance du processus perd les données.
 
-## Tests reproductibles
-
-```powershell
-dotnet run --project tests/SampleApp.Api.RegressionTests -c Release
-# Intégration réseau facultative, séparée des tests déterministes :
-dotnet run --project tests/SampleApp.Api.RegressionTests -c Release -- --live
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
-```
+## Tests
 
 Les tests portables compilent les services sous `net10.0`, sans projet plateforme. Ils couvrent HTTP, JSON, annulation, publication différée, résultats hors ordre, erreur/retry, réponse vide, sélection et disposal. Les commentaires d'un autre article et les IDs dupliqués sont rejetés. Le test live lit les articles puis les commentaires du premier article. Il ne prouve pas l'exécution du SampleApp sur téléphone : vérifier séparément chargement, mode avion, Retry, Refresh rapide, liste → détail → Retour, changement d'article pendant le chargement et background/foreground sur appareil. La validation iOS complète requiert macOS/Xcode.

@@ -62,9 +62,4 @@ Dans ce mode, le développeur assume le padding et l'accessibilité du contenu s
 
 ## Validation automatisée
 
-```powershell
-dotnet run --project tests/XenoUI.Core.RegressionTests -c Release
-dotnet run --project tests/SampleApp.Api.RegressionTests -c Release
-```
-
 Les régressions ciblées couvrent wrap, newline, largeur réelle des Rows, limites de lignes, taille minimale, reflow après resize, zéro allocation sur frames multiligne stabilisées, hauteur d'une barre personnalisée avec marges, ouverture du drawer et restauration de payloads sur une page persistante.

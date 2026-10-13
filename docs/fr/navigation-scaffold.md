@@ -1,6 +1,6 @@
 # Navigation et NavigationScaffold
 
-[Accueil](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Index docs](index.md) · [Guide développeur](developer-guide.md) · [Architecture des scènes](architecture/navigation-and-scenes.md)
+[Index docs](index.md) · [Guide développeur](developer-guide.md) · [Architecture des scènes](architecture/navigation-and-scenes.md)
 
 `NavigationScaffold` ajoute une navigation principale adaptative sans remplacer la pile historique. Une destination possède sa propre pile ; `Navigate<TPage>()` pousse toujours dans la pile sélectionnée. Les instances de `XenoPage`, `ScrollState`, `LazyListState` et `TextEditController` restent persistantes.
 

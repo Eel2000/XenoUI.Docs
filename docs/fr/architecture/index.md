@@ -1,6 +1,6 @@
 # Architecture XenoUI
 
-[Accueil](https://github.com/Eel2000/XenoUI/blob/master/README.md) · [Index docs](../index.md) · [Guide développeur](../developer-guide.md) · [Décisions V1](decisions-v1.md)
+[Index docs](../index.md) · [Guide développeur](../developer-guide.md) · [Décisions V1](decisions-v1.md)
 
 Ce module est la référence d’architecture du framework. Il décrit les frontières réellement présentes dans le dépôt, les invariants que les contributions doivent préserver et les écarts à fermer avant V1.
 
@@ -57,7 +57,7 @@ flowchart TB
 | `XenoUI.BuildTasks` | génération MSBuild déterministe | détection d’appareils ou runtime UI |
 | `Xeno.SDK` | expérience projet MSBuild, références NuGet, points d’entrée, assets | logique runtime |
 | `XenoUI.Tooling` | appareils et lancement hors processus | rendu ou état d’application |
-| `tools/vscode-xenoui` | UX VS Code, sélection et commandes | duplication de la logique ADB/build |
+| Extension VS Code (prototype) | UX VS Code, sélection et commandes | duplication de la logique ADB/build |
 
 ## Vue d’ensemble du runtime
 

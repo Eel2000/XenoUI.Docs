@@ -4,16 +4,12 @@
 
 **PC comparison only.** The mobile reference is now the [Samsung A15 benchmark](runtime-benchmark-a15.md), measured on the physical device. Do not use the desktop numbers below as the phone's expected performance.
 
-## Scope and reproduction
+## Scope
 
 Local Release benchmark of the current, uncommitted `codex/runtime-critical-stabilization` checkpoint. This is **not** a mobile FPS or GPU benchmark and is not a before/after comparison.
 
-```powershell
-$env:DOTNET_TieredCompilation = '0'
-dotnet run --project tests/XenoUI.Core.RegressionTests -c Release --no-restore -- --benchmark
-```
 
-Remove `--no-restore` if dependencies have not yet been restored. The environment setting applies to the current shell; remove it afterwards if it was not set previously. The benchmark prints JSON with timings, allocations, GC counts and build counts.
+The benchmark is a mode of the framework's regression suite, run with tiered compilation disabled (`DOTNET_TieredCompilation=0`). It prints JSON with timings, allocations, GC counts and build counts.
 
 - Host: Windows x64, build 26200; Intel family 6/model 170/stepping 4; 14 logical processors visible to .NET.
 - Runtime: .NET 10.0.12, tiered compilation disabled, Release.

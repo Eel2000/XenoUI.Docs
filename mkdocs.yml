@@ -1,8 +1,8 @@
 site_name: XenoUI
 site_description: Declarative cross-platform mobile UI framework for .NET, rendered with SkiaSharp.
 site_url: https://eel2000.github.io/XenoUI.Docs/
-repo_url: https://github.com/Eel2000/XenoUI
-repo_name: Eel2000/XenoUI
+repo_url: https://github.com/Eel2000/XenoUI.Docs
+repo_name: Eel2000/XenoUI.Docs
 edit_uri: https://github.com/Eel2000/XenoUI.Docs/edit/main/docs/
 copyright: Copyright &copy; XenoUI contributors — BSL-1.0
 
@@ -63,6 +63,12 @@ plugins:
             Media: Média
             Performance: Performance
             History: Historique
+  - macros:
+      on_undefined: strict
+
+extra:
+  # Current XenoUI release, used in pages as {{ xeno_version }}.
+  xeno_version: 0.1.0-preview.5
 
 markdown_extensions:
   - admonition
