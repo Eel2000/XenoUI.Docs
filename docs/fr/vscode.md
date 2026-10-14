@@ -8,9 +8,19 @@ L’extension **XenoUI** pour Visual Studio Code apporte sur macOS, Linux et Win
 - **la création de projets, pages et composants** à partir des templates `XenoUI.Templates` ;
 - la sélection d’un appareil Android et le lancement de l’application (outil `xeno`).
 
-> **Statut : fusionnée le 14 octobre 2026, pas encore publiée.** L’extension arrivera sur le Marketplace VS Code avec la prochaine préversion de XenoUI (après `{{ xeno_version }}`). En attendant, utilisez VS Code avec C# Dev Kit et lancez l’application depuis le terminal intégré avec `xeno run` ([guide développeur](developer-guide.md#5-construire-et-lancer)).
+> **Statut : pré-version `{{ vscode_extension_version }}` publiée sur le [Marketplace VS Code](https://marketplace.visualstudio.com/items?itemName=EliezerBwana.xenoui).** L’extension a son propre numéro de version ; elle crée des projets avec `Xeno.SDK` `{{ xeno_version }}`.
 >
-> Prérequis : VS Code 1.95+ et le SDK .NET 10 (l’aperçu compile avec ses assemblies de référence ; la création de projets utilise `dotnet new`). Le serveur, le client du protocole, les templates et la création d’éléments sont testés sur macOS, et le paquet Windows x64 sous Windows ; le panneau dans une vraie fenêtre VS Code et Linux restent à valider.
+> Prérequis : VS Code 1.95+ et le SDK .NET 10 (l’aperçu compile avec ses assemblies de référence ; la création de projets utilise `dotnet new`). Le serveur, le client du protocole, les templates et la création d’éléments sont testés sur macOS, et le paquet Windows sous Windows ; le panneau sous Linux reste à valider.
+
+## Installer
+
+Dans VS Code : vue *Extensions* (**Cmd/Ctrl+Shift+X**), recherchez **XenoUI** (éditeur *EliezerBwana*), puis **Installer**. Seule une pré-version existe pour l’instant ; si VS Code propose les deux, choisissez *Installer la pré-version*. En ligne de commande :
+
+```bash
+code --install-extension EliezerBwana.xenoui --pre-release
+```
+
+VS Code installe automatiquement le paquet de votre plateforme (`win32-x64`, `win32-arm64`, `darwin-x64`, `darwin-arm64`, `linux-x64`, `linux-arm64`, `alpine-x64`). Les mises à jour arrivent par le Marketplace. Désinstallation : `code --uninstall-extension EliezerBwana.xenoui`.
 
 ## Créer un projet, une page, un composant
 

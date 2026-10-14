@@ -29,7 +29,7 @@ xeno devices --json
 
 ### The CLI sees the target, VS Code does not
 
-The [VS Code extension](vscode.md) is not published yet: launch from the integrated terminal with `xeno run --project MyApp.csproj --device <id>`. Once the extension is installed, check that `xenoui.cliPath` points to the same `xeno` tool as the terminal.
+Check that the [XenoUI extension](vscode.md) is installed and that `xenoui.cliPath` points to the same `xeno` tool as the terminal (**XenoUI: Refresh Devices** runs the detection again). Meanwhile, launch from the integrated terminal with `xeno run --project MyApp.csproj --device <id>`.
 
 ## `xeno run` says the device is offline or unauthorized
 

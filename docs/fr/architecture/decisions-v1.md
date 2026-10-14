@@ -91,7 +91,7 @@ Ce document transforme l’audit du dépôt en décisions explicites. Il ne remp
 | P1 | CLI Android uniquement | iOS non intégré | provider iOS et contrat devices commun |
 | P1 | incrémentalité fine des manifests SDK | tâche XML réévaluée à chaque build | inputs/outputs et diagnostics enrichis ; génération sous `obj` et absence de modification source déjà couvertes |
 | P2 | moteur layout maison non conforme documenté | cas flex complexes | suite conformité + décision Yoga |
-| P2 | extension VS Code (aperçu, templates, appareils) fusionnée, non publiée | panneau non validé dans une vraie fenêtre VS Code ni sous Linux | tests Extension Host, publication Marketplace (version sans suffixe de préversion) |
+| P2 | extension VS Code (aperçu, templates, appareils) publiée en pré-version | panneau non validé sous Linux | tests Extension Host, version stable sur le Marketplace |
 | P2 | pas d’extension Visual Studio dédiée | tooling XenoUI non unifié | décision produit + prototype si nécessaire |
 | P2 | baselines PC et CPU/thread GL A15 disponibles ; présentation/mémoire soutenue ouvertes | FPS présentés et stabilité mémoire en usage prolongé non prouvés | traces GPU/présentation/mémoire + autres appareils physiques |
 

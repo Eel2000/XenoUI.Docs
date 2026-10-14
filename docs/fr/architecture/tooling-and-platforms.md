@@ -165,7 +165,7 @@ Conséquence : un appareil visible par `xeno devices` valide ADB, mais pas autom
 
 ## 7. VS Code
 
-L’extension **XenoUI** pour VS Code (fusionnée le 14 octobre 2026, pas encore publiée) couvre trois usages ; le guide utilisateur est [VS Code](../vscode.md).
+L’extension **XenoUI** pour VS Code (pré-version `{{ vscode_extension_version }}` sur le Marketplace VS Code, éditeur `EliezerBwana`) couvre trois usages ; le guide utilisateur est [VS Code](../vscode.md).
 
 - **Appareils et lancement** : cible dans la barre de statut, sélection par Quick Pick et lancement délégués au CLI `xeno` (résolu via `xenoui.cliPath` ou le `PATH`), sans dupliquer la logique ADB/build. Le JSON de `xeno devices --json` est traité comme une donnée non fiable (erreur de parsing, version incompatible, processus interrompu → message actionnable).
 - **XenoUI Preview** : une webview pilote le même `XenoUI.PreviewServer` que Visual Studio, avec le même protocole JSON lignes. Une requête à la fois, délai de 45 s, redémarrage après crash ou blocage ; anti-rebond de 350 ms et aucun travail quand le panneau est masqué ; CSP stricte, seul le dossier d’images de la fenêtre est lisible.

@@ -69,6 +69,8 @@ plugins:
 extra:
   # Current XenoUI release, used in pages as {{ xeno_version }}.
   xeno_version: 0.1.0-preview.5
+  # VS Code extension (EliezerBwana.xenoui), versioned separately, pre-release.
+  vscode_extension_version: 0.1.5
 
 markdown_extensions:
   - admonition

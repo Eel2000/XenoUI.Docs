@@ -8,9 +8,19 @@ The **XenoUI** extension for Visual Studio Code brings to macOS, Linux and Windo
 - **creating projects, pages and components** from the `XenoUI.Templates` templates;
 - Android device selection and application launching (the `xeno` tool).
 
-> **Status: merged on 14 October 2026, not published yet.** The extension will arrive on the VS Code Marketplace with the next XenoUI preview (after `{{ xeno_version }}`). Until then, use VS Code with C# Dev Kit and launch the application from the integrated terminal with `xeno run` ([developer guide](developer-guide.md#5-building-and-launching)).
+> **Status: pre-release `{{ vscode_extension_version }}` published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=EliezerBwana.xenoui).** The extension has its own version number; it creates projects with `Xeno.SDK` `{{ xeno_version }}`.
 >
-> Prerequisites: VS Code 1.95+ and the .NET 10 SDK (previews compile against its reference assemblies; project creation uses `dotnet new`). The server, the protocol client, the templates and item creation are tested on macOS, and the Windows x64 package on Windows; the panel in a real VS Code window and Linux still have to be validated.
+> Prerequisites: VS Code 1.95+ and the .NET 10 SDK (previews compile against its reference assemblies; project creation uses `dotnet new`). The server, the protocol client, the templates and item creation are tested on macOS, and the Windows package on Windows; the panel on Linux still has to be validated.
+
+## Installing
+
+In VS Code: *Extensions* view (**Cmd/Ctrl+Shift+X**), search for **XenoUI** (publisher *EliezerBwana*), then **Install**. Only a pre-release exists for now; if VS Code offers both, choose *Install Pre-Release Version*. From the command line:
+
+```bash
+code --install-extension EliezerBwana.xenoui --pre-release
+```
+
+VS Code installs the package for your platform automatically (`win32-x64`, `win32-arm64`, `darwin-x64`, `darwin-arm64`, `linux-x64`, `linux-arm64`, `alpine-x64`). Updates come through the Marketplace. Uninstall: `code --uninstall-extension EliezerBwana.xenoui`.
 
 ## Creating a project, a page, a component
 
