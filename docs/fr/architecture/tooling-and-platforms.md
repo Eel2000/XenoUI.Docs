@@ -40,7 +40,7 @@ Le consommateur utilise `<Project Sdk="Xeno.SDK/{{ xeno_version }}">`, ou une ve
 
 - active nullable et implicit usings ;
 - marque `XenoUIProject` et la capacité IDE `XenoUI` ;
-- définit `OutputType=Exe` par défaut ;
+- définit `OutputType=Exe` par défaut, avant l’import de `Microsoft.NET.Sdk` (jusqu’à `{{ xeno_version }}`, la valeur était posée après et ne s’appliquait pas : voir [dépannage](../troubleshooting.md#le-build-ios-échoue-avec-cs8805)) ;
 - définit identifiant, nom et minimums OS par défaut ;
 
 ### `Sdk.targets`

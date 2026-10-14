@@ -40,7 +40,7 @@ The consumer uses `<Project Sdk="Xeno.SDK/{{ xeno_version }}">`, or a version ce
 
 - enables nullable and implicit usings;
 - marks `XenoUIProject` and the `XenoUI` IDE capability;
-- sets `OutputType=Exe` by default;
+- sets `OutputType=Exe` by default, before importing `Microsoft.NET.Sdk` (up to `{{ xeno_version }}` the value was set afterwards and never applied: see [troubleshooting](../troubleshooting.md#the-ios-build-fails-with-cs8805));
 - sets the default identifier, name and OS minimums;
 
 ### `Sdk.targets`

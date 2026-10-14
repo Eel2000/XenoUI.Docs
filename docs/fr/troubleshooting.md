@@ -173,6 +173,20 @@ Après ajout d’un asset, reconstruisez : il est embarqué à la compilation.
 - sur Android 13+, confirmez l’enregistrement du callback seulement quand `CanGoBack` ;
 - à la racine, la fermeture/délégation à l’OS est le comportement attendu.
 
+## Le build iOS échoue avec `CS8805`
+
+Avec `Xeno.SDK` `{{ xeno_version }}`, la valeur par défaut `OutputType=Exe` n’est pas appliquée : `Microsoft.NET.Sdk` fixe `Library` avant elle. Android construit quand même une application (`AndroidApplication=true`), mais sur iOS le `Main.cs` généré est compilé comme une bibliothèque et le build échoue avec `CS8805`.
+
+Contournement : déclarez la valeur dans le projet.
+
+```xml
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+</PropertyGroup>
+```
+
+Corrigé sur la branche principale le 14 octobre 2026, livré avec la prochaine préversion ; la ligne peut alors être retirée.
+
 ## Le build iOS crée/modifie `Info.plist`
 
 Lorsque le projet n’a pas de `Info.plist`, la cible SDK copie actuellement le fichier par défaut dans la racine du projet car le SDK iOS n’accepte pas simplement le fichier lié. Cette écriture dans le projet consommateur est connue et doit être remplacée avant V1. Ajoutez un `Info.plist` explicite si vous avez besoin d’un contrôle stable.

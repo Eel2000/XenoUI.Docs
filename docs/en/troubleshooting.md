@@ -173,6 +173,20 @@ After adding an asset, rebuild: it is embedded at compile time.
 - on Android 13+, confirm the callback is registered only when `CanGoBack`;
 - at the root, closing/delegating to the OS is the expected behaviour.
 
+## The iOS build fails with `CS8805`
+
+With `Xeno.SDK` `{{ xeno_version }}`, the `OutputType=Exe` default is not applied: `Microsoft.NET.Sdk` sets `Library` before it. Android still builds an application (`AndroidApplication=true`), but on iOS the generated `Main.cs` is compiled as a library and the build fails with `CS8805`.
+
+Workaround: declare the value in the project.
+
+```xml
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+</PropertyGroup>
+```
+
+Fixed on the main branch on 14 October 2026, shipped with the next preview; the line can then be removed.
+
 ## The iOS build creates/modifies `Info.plist`
 
 When the project has no `Info.plist`, the SDK target currently copies the default file into the project root because the iOS SDK does not simply accept the linked file. This write into the consuming project is known and must be replaced before V1. Add an explicit `Info.plist` if you need stable control.
