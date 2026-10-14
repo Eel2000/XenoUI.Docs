@@ -101,7 +101,7 @@ xeno run --project MyApp.csproj --device <device-id>
 
 ## 6. Le previewer (extension Visual Studio)
 
-L’extension **XenoUI Preview** affiche les `[Preview]` de vos pages et composants pendant la frappe. Elle arrive bientôt sur le Visual Studio Marketplace ; une fois publiée :
+L’extension **XenoUI Preview** affiche les `[Preview]` de vos pages et composants pendant la frappe. Elle n’est pas encore ouverte au public et arrivera bientôt sur le Visual Studio Marketplace ; en attendant, utilisez l’[extension VS Code](vscode.md), qui offre les mêmes aperçus. Une fois l’extension Visual Studio publiée :
 
 1. Dans Visual Studio : *Extensions › Gérer les extensions*, recherchez **XenoUI Preview** et installez-la, puis redémarrez Visual Studio.
 2. Ouvrez un fichier C# d’un projet `Xeno.SDK`, puis *Affichage › Autres fenêtres › XenoUI Preview* (**Ctrl+Alt+P**). Avec le template, `Pages/HomePage.cs` affiche deux aperçus.

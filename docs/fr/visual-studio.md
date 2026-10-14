@@ -9,7 +9,7 @@ XenoUI fournit deux éléments pour Visual Studio :
 - **des templates** `dotnet new`, visibles dans *Créer un projet* et *Ajouter › Nouvel élément* : « XenoUI App », « XenoUI Page » et « XenoUI Component » ;
 - **l’extension XenoUI Preview** : une fenêtre d’outil qui affiche, pendant la frappe, les composants et pages marqués `[Preview]`, comme les aperçus Compose d’Android Studio. Elle ne compile pas le projet par MSBuild et ne lance ni l’application, ni un émulateur.
 
-> **Statut : `{{ xeno_version }}`.** Les templates sont publiés sur [nuget.org](https://www.nuget.org/packages/XenoUI.Templates) ; l’extension XenoUI Preview arrive bientôt sur le Visual Studio Marketplace. Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 10 (installé avec le SDK .NET 10) pour le serveur de rendu.
+> **Statut : `{{ xeno_version }}`.** Les templates sont publiés sur [nuget.org](https://www.nuget.org/packages/XenoUI.Templates) ; l’extension XenoUI Preview n’est pas encore ouverte au public et arrivera bientôt sur le Visual Studio Marketplace. En attendant, les mêmes aperçus sont disponibles sous Windows, macOS et Linux avec l’[extension VS Code](vscode.md). Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 10 (installé avec le SDK .NET 10) pour le serveur de rendu.
 
 ## Installer
 
