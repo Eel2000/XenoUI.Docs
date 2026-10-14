@@ -106,6 +106,7 @@ nav:
   - Guides:
       - xeno-sdk.md
       - visual-studio.md
+      - vscode.md
       - navigation-scaffold.md
       - text-layout-navigation.md
       - sample-api.md

@@ -491,7 +491,7 @@ En cas d’absence de cible, validez d’abord `adb devices -l`, puis `xeno devi
 
 ## 14. VS Code
 
-Avec C# Dev Kit, construisez et lancez depuis le terminal intégré avec `xeno run` (§ 5). Une extension VS Code dédiée (sélection d’appareil et lancement) est en préparation et n’est pas encore publiée.
+Avec C# Dev Kit, construisez et lancez depuis le terminal intégré avec `xeno run` (§ 5). L’extension **XenoUI** pour VS Code (panneau XenoUI Preview, création de projets/pages/composants, sélection d’appareil et lancement) est fusionnée et arrivera sur le Marketplace avec la prochaine préversion : voir [VS Code](vscode.md).
 
 ## 15. Debugging
 

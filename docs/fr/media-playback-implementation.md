@@ -19,7 +19,7 @@ La page Shorts demandée dans SampleApp est reportée après validation des vrai
 - Le test Android a révélé un commit de navigation/lifecycle sur GLThread. Les hosts dispatchent maintenant les commits différés et les actions structurelles du drawer vers le thread de contrôle ; les anciennes entrées/dispose invalident les commits en attente.
 - Le test de destruction d'une seconde Activity a aussi révélé une libération prématurée du peer Java de `XenoView`. `Shutdown()` libère le moteur après arrêt du thread GL, de façon idempotente, sans invalider la vue encore détenue par Android pendant le détachement de la fenêtre. Les callbacks tardifs ne touchent plus les ressources libérées.
 
-**Gates ouvertes :** adaptateur AVPlayer et validation iOS, interruptions physiques/écouteurs/Bluetooth, benchmark complet du pump/JNI et du handoff de navigation, transport vidéo vers les slabs ECS, sorties vidéo/GPU et service background. Les phases 0 et 1 ne sont donc pas déclarées terminées sur les deux plateformes. Voir le [contrat et les règles d’usage](media-controller.md).
+**Gates ouvertes :** validation iOS sur appareil réel et en Release (l’adaptateur AVPlayer est fusionné le 14 octobre 2026 et validé sur simulateur, voir [contrôleur média](media-controller.md#module-optionnel)), interruptions physiques/écouteurs/Bluetooth, benchmark complet du pump/JNI et du handoff de navigation, transport vidéo vers les slabs ECS, sorties vidéo/GPU et service background. Les phases 0 et 1 ne sont donc pas déclarées terminées sur les deux plateformes. Voir le [contrat et les règles d’usage](media-controller.md).
 
 ### Incrément vidéo native de référence
 

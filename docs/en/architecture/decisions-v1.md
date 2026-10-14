@@ -91,7 +91,7 @@ This document turns the repository audit into explicit decisions. It does not re
 | P1 | Android-only CLI | iOS not integrated | iOS provider and a common devices contract |
 | P1 | fine-grained incrementality of SDK manifests | XML task re-evaluated on each build | richer inputs/outputs and diagnostics; generation under `obj` and no source modification already covered |
 | P2 | home-grown layout engine without documented conformance | complex flex cases | conformance suite + Yoga decision |
-| P2 | prototype VS Code extension | fragile DX | Extension Host tests, publishing/versioning |
+| P2 | VS Code extension (preview, templates, devices) merged, not published | panel not validated in a real VS Code window nor on Linux | Extension Host tests, Marketplace publishing (version without a prerelease suffix) |
 | P2 | no dedicated Visual Studio extension | XenoUI tooling not unified | product decision + prototype if needed |
 | P2 | PC and A15 CPU/GL thread baselines available; presentation/sustained memory open | presented FPS and memory stability in prolonged use not proven | GPU/presentation/memory traces + other physical devices |
 

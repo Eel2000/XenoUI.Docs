@@ -2,6 +2,8 @@
 
 [Documentation](index.md) · [Guide développeur](developer-guide.md) · [Xeno.SDK](xeno-sdk.md) · [Architecture du tooling](architecture/tooling-and-platforms.md)
 
+Sous macOS et Linux, voir [VS Code](vscode.md).
+
 XenoUI fournit deux éléments pour Visual Studio :
 
 - **des templates** `dotnet new`, visibles dans *Créer un projet* et *Ajouter › Nouvel élément* : « XenoUI App », « XenoUI Page » et « XenoUI Component » ;

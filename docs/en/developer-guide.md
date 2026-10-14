@@ -491,7 +491,7 @@ If no target shows up, first validate `adb devices -l`, then `xeno devices`. If 
 
 ## 14. VS Code
 
-With C# Dev Kit, build and launch from the integrated terminal with `xeno run` (§ 5). A dedicated VS Code extension (device selection and launching) is in preparation and not yet published.
+With C# Dev Kit, build and launch from the integrated terminal with `xeno run` (§ 5). The **XenoUI** extension for VS Code (XenoUI Preview panel, project/page/component creation, device selection and launching) is merged and will reach the Marketplace with the next preview: see [VS Code](vscode.md).
 
 ## 15. Debugging
 

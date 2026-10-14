@@ -57,7 +57,7 @@ flowchart TB
 | `XenoUI.BuildTasks` | génération MSBuild déterministe | détection d’appareils ou runtime UI |
 | `Xeno.SDK` | expérience projet MSBuild, références NuGet, points d’entrée, assets | logique runtime |
 | `XenoUI.Tooling` | appareils et lancement hors processus | rendu ou état d’application |
-| Extension VS Code (prototype) | UX VS Code, sélection et commandes | duplication de la logique ADB/build |
+| Extension VS Code | aperçus `[Preview]`, templates, sélection d’appareil et lancement | duplication de la logique ADB/build |
 
 ## Vue d’ensemble du runtime
 

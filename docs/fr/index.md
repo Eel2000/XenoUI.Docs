@@ -16,6 +16,7 @@ Cet index est le point d’entrée officiel de la documentation XenoUI. Il disti
 6. [Démonstration API](sample-api.md) : HTTP portable, liste distante, annulation et tests, sans SQLite.
 7. [Texte contraint et paramètres typés](text-layout-navigation.md) : wrap, ellipsis, AutoSize, payloads de navigation et espace réservé à la BottomBar.
 8. [Visual Studio](visual-studio.md) : templates de projet et d’éléments, `[Preview]` et fenêtre XenoUI Preview.
+   [VS Code](vscode.md) : panneau XenoUI Preview et création de projets, pages et composants sur macOS, Linux et Windows (prochaine préversion).
 
 ### Contributeur framework
 
@@ -38,6 +39,7 @@ Cet index est le point d’entrée officiel de la documentation XenoUI. Il disti
 | [Guide développeur](developer-guide.md) | **Canonique** | Contrat d’usage public constaté dans le code actuel |
 | [Xeno.SDK](xeno-sdk.md) | **Canonique, preview nuget.org** | Configuration du SDK MSBuild |
 | [Visual Studio](visual-studio.md) | **Canonique, preview** | Templates, `[Preview]` et extension XenoUI Preview |
+| [VS Code](vscode.md) | **Canonique, non publiée** | Extension XenoUI pour VS Code : aperçus, templates, appareils |
 | [Navigation et NavigationScaffold](navigation-scaffold.md) | **Canonique** | API de navigation, transitions, Scaffold et lifecycle |
 | [Dépannage](troubleshooting.md) | **Canonique** | Diagnostic opérationnel |
 | [Module d’architecture](architecture/index.md) | **Canonique** | Référence interne et guide de contribution |

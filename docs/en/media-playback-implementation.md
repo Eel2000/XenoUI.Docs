@@ -19,7 +19,7 @@ The Shorts page requested in SampleApp is postponed until the real players are v
 - The Android test revealed a navigation/lifecycle commit on the GLThread. Hosts now dispatch deferred commits and structural drawer actions to the control thread; old entries/dispose invalidate pending commits.
 - The test destroying a second Activity also revealed a premature release of `XenoView`'s Java peer. `Shutdown()` releases the engine after the GL thread stops, idempotently, without invalidating the view still held by Android while the window detaches. Late callbacks no longer touch released resources.
 
-**Open gates:** AVPlayer adapter and iOS validation, physical/headphone/Bluetooth interruptions, full benchmark of the pump/JNI and the navigation handoff, video transport to the ECS slabs, video/GPU outputs and background service. Phases 0 and 1 are therefore not declared complete on both platforms. See the [contract and usage rules](media-controller.md).
+**Open gates:** iOS validation on a real device and in Release (the AVPlayer adapter was merged on 14 October 2026 and validated on the simulator, see [media controller](media-controller.md#optional-module)), physical/headphone/Bluetooth interruptions, full benchmark of the pump/JNI and the navigation handoff, video transport to the ECS slabs, video/GPU outputs and background service. Phases 0 and 1 are therefore not declared complete on both platforms. See the [contract and usage rules](media-controller.md).
 
 ### Reference native video increment
 

@@ -165,9 +165,13 @@ Consequence: a device visible to `xeno devices` validates ADB, but not automatic
 
 ## 7. VS Code
 
-A dedicated VS Code extension is a prototype and is not published. Today, VS Code with C# Dev Kit builds the project and `xeno run` launches the application from the integrated terminal.
+The **XenoUI** extension for VS Code (merged on 14 October 2026, not published yet) covers three uses; the user guide is [VS Code](../vscode.md).
 
-Target contract for the extension: activation only in a XenoUI Android workspace, target in the status bar, selection through a Quick Pick and launching delegated to the `xeno` CLI (resolved via `xenoui.cliPath` or the `PATH`), without duplicating the ADB/build logic. It must treat the JSON of `xeno devices --json` as untrusted data (parsing error, incompatible version, interrupted process → actionable message) and use `xeno devices --watch` with a single long-lived process, stopped on deactivation, rather than concurrent polling.
+- **Devices and launching**: target in the status bar, selection through a Quick Pick and launching delegated to the `xeno` CLI (resolved via `xenoui.cliPath` or the `PATH`), without duplicating the ADB/build logic. The JSON of `xeno devices --json` is treated as untrusted data (parsing error, incompatible version, interrupted process → actionable message).
+- **XenoUI Preview**: a webview drives the same `XenoUI.PreviewServer` as Visual Studio, with the same JSON-lines protocol. One request at a time, a 45 s timeout, restart after a crash or a hang; a 350 ms debounce and no work while the panel is hidden; strict CSP, only the window's image folder is readable.
+- **Creation**: `New Project/Page/Component` run the `dotnet new` templates; the item namespace is rewritten from `RootNamespace` and the subfolders, because `dotnet new` only binds it once the project is restored.
+
+Each `.vsix` is platform-specific and contains only that platform's native SkiaSharp/HarfBuzz libraries, plus the `XenoUI.Templates` package.
 
 ## 8. Assets and manifests
 

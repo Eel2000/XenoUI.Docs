@@ -165,9 +165,13 @@ Conséquence : un appareil visible par `xeno devices` valide ADB, mais pas autom
 
 ## 7. VS Code
 
-Une extension VS Code dédiée est en prototype et n’est pas publiée. Aujourd’hui, VS Code avec C# Dev Kit construit le projet et `xeno run` lance l’application depuis le terminal intégré.
+L’extension **XenoUI** pour VS Code (fusionnée le 14 octobre 2026, pas encore publiée) couvre trois usages ; le guide utilisateur est [VS Code](../vscode.md).
 
-Contrat visé pour l’extension : activation uniquement dans un workspace XenoUI Android, cible dans la barre de statut, sélection par Quick Pick et lancement délégué au CLI `xeno` (résolu via `xenoui.cliPath` ou le `PATH`), sans dupliquer la logique ADB/build. Elle devra traiter le JSON de `xeno devices --json` comme une donnée non fiable (erreur de parsing, version incompatible, processus interrompu → message actionnable) et utiliser `xeno devices --watch` avec un seul processus long, arrêté à la désactivation, plutôt que des sondages concurrents.
+- **Appareils et lancement** : cible dans la barre de statut, sélection par Quick Pick et lancement délégués au CLI `xeno` (résolu via `xenoui.cliPath` ou le `PATH`), sans dupliquer la logique ADB/build. Le JSON de `xeno devices --json` est traité comme une donnée non fiable (erreur de parsing, version incompatible, processus interrompu → message actionnable).
+- **XenoUI Preview** : une webview pilote le même `XenoUI.PreviewServer` que Visual Studio, avec le même protocole JSON lignes. Une requête à la fois, délai de 45 s, redémarrage après crash ou blocage ; anti-rebond de 350 ms et aucun travail quand le panneau est masqué ; CSP stricte, seul le dossier d’images de la fenêtre est lisible.
+- **Création** : `New Project/Page/Component` exécutent les templates `dotnet new` ; le namespace des éléments est réécrit depuis `RootNamespace` et les sous-dossiers, car `dotnet new` ne le lie qu’une fois le projet restauré.
+
+Chaque `.vsix` est propre à une plateforme et ne contient que les bibliothèques natives SkiaSharp/HarfBuzz de celle-ci, plus le package `XenoUI.Templates`.
 
 ## 8. Assets et manifests
 

@@ -16,6 +16,7 @@ This guide installs everything needed to create, build and preview a XenoUI appl
 | [`XenoUI.Templates`](https://www.nuget.org/packages/XenoUI.Templates) | "XenoUI App / Page / Component" templates (CLI and Visual Studio) | `dotnet new install` (§ 3) |
 | [`XenoUI.Tooling`](https://www.nuget.org/packages/XenoUI.Tooling) | The `xeno` tool: Android devices, build, install, launch | `dotnet tool install` (§ 5) |
 | **XenoUI Preview** extension | `[Preview]` previews in Visual Studio | Coming soon to the Visual Studio Marketplace (§ 6) |
+| **XenoUI** extension for VS Code | Previews, templates and devices in VS Code (macOS, Linux, Windows) | Next preview, on the VS Code Marketplace ([VS Code](vscode.md)) |
 
 Runtimes are never added as `PackageReference`: `Xeno.SDK` picks the right packages and the platform host (`XenoUI.Platforms`) from `TargetFramework`.
 
