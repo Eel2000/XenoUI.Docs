@@ -1,19 +1,24 @@
 name: Check documentation snippets
 
 # Compiles the tutorial samples (tools/DocSnippets) against a XenoUI checkout and renders the screenshots.
-# Manual on purpose: it needs a XenoUI ref that targets the .NET version below, and the site deployment
-# must not depend on it. Run it from the Actions tab after changing the tutorial or the XenoUI sources.
+# It runs when the tools or the tutorial change, and can be started by hand with another XenoUI ref. It is a
+# separate workflow: the site deployment does not depend on it. The default ref must target the .NET version below.
 
 on:
+  push:
+    paths:
+      - tools/DocSnippets/**
+      - docs/en/tutorial-first-app.md
+      - .github/workflows/snippets.yml
   workflow_dispatch:
     inputs:
       xenoui_ref:
         description: Branch, tag or commit of Eel2000/XenoUI to compile against
-        required: true
-        default: master
+        required: false
+        default: feat/dotnet11-coreclr-android
       dotnet_version:
         description: .NET SDK version
-        required: true
+        required: false
         default: 11.0.x
 
 permissions:
@@ -29,11 +34,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Eel2000/XenoUI
-          ref: ${{ inputs.xenoui_ref }}
+          ref: ${{ inputs.xenoui_ref || 'feat/dotnet11-coreclr-android' }}
           path: XenoUI
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ inputs.dotnet_version }}
+          dotnet-version: ${{ inputs.dotnet_version || '11.0.x' }}
           dotnet-quality: preview
       - name: Compile the samples
         run: dotnet build XenoUI.Docs/tools/DocSnippets/DocSnippets.csproj -c Release

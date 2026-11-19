@@ -37,7 +37,8 @@ cd tools/ApiDocGen
 dotnet run -- $out ../../docs/en/reference ../DocSnippets/bin/Debug/net11.0
 ```
 
-The generated pages are English only; French pages fall back to them. The nav entries in `mkdocs.yml` list the generated
+Run it twice: once for English and once with `APIDOC_LANG=fr` into `docs/fr/reference` (French headings and table
+headers; the summaries come from the English source comments and stay in English). The nav entries in `mkdocs.yml` list the generated
 files: add a line when a new namespace appears.
 
 Improve the reference by writing better `/// <summary>` comments in the XenoUI source, then regenerate.
