@@ -14,6 +14,7 @@ docs/
 ├─ en/            English pages (default language, served at /)
 └─ fr/            French pages (served at /fr/), same file names as en/
 mkdocs.yml        site, theme, languages and navigation
+tools/            DocSnippets (compiled samples + screenshots) and ApiDocGen (API reference), see tools/README.md
 ```
 
 A page exists under the same path in both languages. When you change one, update the other;

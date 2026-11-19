@@ -63,6 +63,7 @@ plugins:
             Build the UI: Construire l’interface
             App architecture: Architecture d’application
             Tooling: Outils
+            Reference: Référence
             Architecture: Architecture
             Media: Média
             Performance: Performance
@@ -106,10 +107,13 @@ validation:
 nav:
   - Home: index.md
   - Get started:
+      - why-xenoui.md
       - installation.md
+      - tutorial-first-app.md
       - developer-guide.md
       - sample-app.md
       - troubleshooting.md
+      - faq.md
   - Fundamentals:
       - thinking-in-xenoui.md
       - state.md
@@ -118,19 +122,43 @@ nav:
       - compose-comparison.md
   - Build the UI:
       - components.md
+      - component-catalog.md
       - layouts.md
       - customization.md
       - animations.md
       - navigation-scaffold.md
       - text-layout-navigation.md
+      - accessibility.md
+      - localization.md
   - App architecture:
       - app-architecture.md
+      - native-capabilities.md
       - testing.md
+      - debugging.md
+      - publishing.md
       - sample-api.md
   - Tooling:
       - xeno-sdk.md
       - visual-studio.md
       - vscode.md
+  - Reference:
+      - reference/index.md
+      - reference/xenoui-core-components-enums.md
+      - reference/xenoui-core-compositor-widgets.md
+      - reference/xenoui-core-compositor.md
+      - reference/xenoui-core-hooks.md
+      - reference/xenoui-core-nativetunnel.md
+      - reference/xenoui-core-preview.md
+      - reference/xenoui-core-text.md
+      - reference/xenoui-media.md
+      - reference/xenoui-standardlibrary-controls.md
+      - reference/xenoui-standardlibrary-icons.md
+      - reference/xenoui-standardlibrary-overlays.md
+      - reference/xenoui-standardlibrary-shell.md
+      - reference/xenoui-standardlibrary.md
+      - release-notes.md
+      - migration.md
+      - glossary.md
   - Architecture:
       - architecture/index.md
       - architecture/runtime.md

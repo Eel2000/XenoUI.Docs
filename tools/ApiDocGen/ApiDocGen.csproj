@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Generates docs/en/reference/*.md from the compiled XenoUI assemblies and their XML documentation.
+    Usage:  dotnet run (arguments: assembly directory, output directory)
+    See tools/README.md for how to produce the assemblies. Not part of the site build.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -8,10 +8,11 @@ Cet index est le point d’entrée officiel de la documentation XenoUI. Il disti
 
 | Thème | Pour commencer |
 |---|---|
-| **Démarrer** | [Installation](installation.md) · [Guide développeur](developer-guide.md) · [Apprendre par le SampleApp](sample-app.md) |
+| **Démarrer** | [Pourquoi XenoUI ?](why-xenoui.md) · [Installation](installation.md) · [**Tutoriel : votre première application**](tutorial-first-app.md) · [Guide développeur](developer-guide.md) · [Apprendre par le SampleApp](sample-app.md) · [FAQ](faq.md) |
 | **Fondamentaux** | [Penser en XenoUI](thinking-in-xenoui.md) · [État et reconstruction](state.md) · [Cycle de vie](lifecycle.md) · [Effets de bord et travail asynchrone](side-effects.md) |
-| **Construire l’interface** | [Créer un composant](components.md) · [Mises en page](layouts.md) · [Personnaliser](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) |
-| **Architecture et qualité** | [Architecture d’une application](app-architecture.md) · [Tester](testing.md) · [Performance](performance.md) |
+| **Construire l’interface** | [Créer un composant](components.md) · [Mises en page](layouts.md) · [Catalogue des composants](component-catalog.md) · [Personnaliser](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) · [Accessibilité](accessibility.md) · [Localisation](localization.md) |
+| **Architecture et qualité** | [Architecture d’une application](app-architecture.md) · [Capacités natives](native-capabilities.md) · [Tester](testing.md) · [Déboguer](debugging.md) · [Performance](performance.md) · [Publier](publishing.md) |
+| **Référence** | [Référence d’API](reference/index.md) · [Notes de version](release-notes.md) · [Migration](migration.md) · [Glossaire](glossary.md) |
 | **Venir d’Android** | [De Jetpack Compose à XenoUI](compose-comparison.md) |
 | **Outils** | [Xeno.SDK](xeno-sdk.md) · [Visual Studio](visual-studio.md) · [VS Code](vscode.md) |
 

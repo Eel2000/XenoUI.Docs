@@ -8,10 +8,11 @@ This index is the official entry point to the XenoUI documentation. It separates
 
 | Topic | Start here |
 |---|---|
-| **Get started** | [Installation](installation.md) · [Developer guide](developer-guide.md) · [Learning from the SampleApp](sample-app.md) |
+| **Get started** | [Why XenoUI?](why-xenoui.md) · [Installation](installation.md) · [**Tutorial: your first app**](tutorial-first-app.md) · [Developer guide](developer-guide.md) · [Learning from the SampleApp](sample-app.md) · [FAQ](faq.md) |
 | **Fundamentals** | [Thinking in XenoUI](thinking-in-xenoui.md) · [State and rebuilding](state.md) · [Lifecycle](lifecycle.md) · [Side effects and async work](side-effects.md) |
-| **Build the UI** | [Creating a component](components.md) · [Layouts](layouts.md) · [Customising](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) |
-| **App architecture and quality** | [Application architecture](app-architecture.md) · [Testing](testing.md) · [Performance](performance.md) |
+| **Build the UI** | [Creating a component](components.md) · [Layouts](layouts.md) · [Component catalogue](component-catalog.md) · [Customising](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) · [Accessibility](accessibility.md) · [Localization](localization.md) |
+| **App architecture and quality** | [Application architecture](app-architecture.md) · [Native capabilities](native-capabilities.md) · [Testing](testing.md) · [Debugging](debugging.md) · [Performance](performance.md) · [Publishing](publishing.md) |
+| **Reference** | [API reference](reference/index.md) · [Release notes](release-notes.md) · [Migration](migration.md) · [Glossary](glossary.md) |
 | **Coming from Android** | [From Jetpack Compose to XenoUI](compose-comparison.md) |
 | **Tooling** | [Xeno.SDK](xeno-sdk.md) · [Visual Studio](visual-studio.md) · [VS Code](vscode.md) |
 

@@ -2,3 +2,5 @@ site/
 .venv/
 __pycache__/
 .cache/
+tools/**/bin/
+tools/**/obj/

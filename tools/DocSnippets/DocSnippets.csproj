@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Compiles every code sample of the tutorial against the real XenoUI sources and renders the
+    documentation screenshots (docs/assets/img) with the headless PreviewRenderer.
+    Needs a checkout of the XenoUI repository next to this one (../XenoUI), or -p:XenoSourceRoot=<path>/.
+    Not part of the site build (CI only runs mkdocs).
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <XenoSourceRoot Condition="'$(XenoSourceRoot)' == ''">$(MSBuildThisFileDirectory)../../../XenoUI/</XenoSourceRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(XenoSourceRoot)XenoUI.Core/XenoUI.Core.csproj" />
+    <ProjectReference Include="$(XenoSourceRoot)XenoUI.StandardLibrary/XenoUI.StandardLibrary.csproj" />
+  </ItemGroup>
+
+  <!-- The same implicit imports Xeno.SDK gives an application. -->
+  <ItemGroup>
+    <Using Include="XenoUI.Core.Compositor" />
+    <Using Include="XenoUI.Core.Compositor.Widgets" />
+    <Using Include="XenoUI.Core.Components.Enums" />
+    <Using Include="XenoUI.Core.Compositor.Compose" Static="true" />
+    <Using Include="XenoUI.Core.Hooks.Hooks" Static="true" />
+    <Using Include="XenoUI.Core.Hooks" />
+    <Using Include="XenoUI.StandardLibrary.Controls" />
+    <Using Include="XenoUI.StandardLibrary.Overlays" />
+    <Using Include="XenoUI.StandardLibrary.Shell" />
+    <Using Include="XenoUI.StandardLibrary.Controls.Widgets" Static="true" />
+  </ItemGroup>
+
+</Project>
