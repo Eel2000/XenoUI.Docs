@@ -109,6 +109,10 @@ nav:
       - xeno-sdk.md
       - visual-studio.md
       - vscode.md
+      - sample-app.md
+      - components.md
+      - customization.md
+      - animations.md
       - navigation-scaffold.md
       - text-layout-navigation.md
       - sample-api.md

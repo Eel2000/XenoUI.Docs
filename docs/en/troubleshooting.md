@@ -21,7 +21,7 @@ xeno devices --json
 
 ### The CLI sees the target, Visual Studio does not
 
-- select your XenoUI project, the `net10.0-android` TFM and a deployable configuration;
+- select your XenoUI project, the `net11.0-android` TFM and a deployable configuration;
 - reload the solution after installing the workload;
 - check that the evaluated project exposes `AndroidApplication=true`;
 - confirm that the project is ticked *Deploy* in the solution Configuration Manager;
@@ -48,7 +48,7 @@ The CLI looks for the APK under `bin/<Configuration>/<TFM>/<RID>/` and prefers `
 
 ```powershell
 dotnet build MyApp.csproj `
-  -f net10.0-android -c Debug `
+  -f net11.0-android -c Debug `
   -p:RuntimeIdentifier=android-arm64
 ```
 
@@ -65,7 +65,7 @@ With `Xeno.SDK`, this DLL is embedded in the package under `tools/netstandard2.0
 
 ```powershell
 dotnet restore MyApp.csproj
-dotnet build MyApp.csproj -f net10.0-android
+dotnet build MyApp.csproj -f net11.0-android
 ```
 
 A path into `bin/Debug` points to the old local imports from before `Xeno.SDK`: migrate the project to `<Project Sdk="Xeno.SDK">` ([Xeno.SDK](xeno-sdk.md)). Do not delete the whole NuGet cache.
@@ -77,7 +77,7 @@ Check the SDK, its version and the TFM:
 ```xml
 <Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
+    <TargetFrameworks>net11.0-android;net11.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 </Project>
@@ -87,7 +87,7 @@ Then inspect the evaluation:
 
 ```powershell
 dotnet msbuild path/to/App.csproj `
-  -p:TargetFramework=net10.0-android `
+  -p:TargetFramework=net11.0-android `
   -getProperty:AndroidApplication `
   -getProperty:ApplicationId
 ```
@@ -196,7 +196,7 @@ When the project has no `Info.plist`, the SDK target currently copies the defaul
 After saving the logs and checking that no useful work lives in the generated folders:
 
 ```powershell
-dotnet clean MyApp.csproj -f net10.0-android
+dotnet clean MyApp.csproj -f net11.0-android
 ```
 
 Prefer `dotnet clean` to a broad manual deletion. If you must delete `bin/obj`, target only the project concerned.

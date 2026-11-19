@@ -6,7 +6,7 @@
 
 ## Status and prerequisites
 
-Current version: `{{ xeno_version }}`, published on nuget.org. You need .NET 10 and the workload of the targeted platform. The SDK does not silently download a workload, the Android SDK or Xcode. Building/signing/running an iOS application always requires macOS and Xcode; evaluating an iOS project on Windows is not a validation of the iOS application.
+Current version: `{{ xeno_version }}`, published on nuget.org. You need .NET 11 and the workload of the targeted platform. The SDK does not silently download a workload, the Android SDK or Xcode. Building/signing/running an iOS application always requires macOS and Xcode; evaluating an iOS project on Windows is not a validation of the iOS application.
 
 All published packages share the same version:
 
@@ -14,7 +14,7 @@ All published packages share the same version:
 |---|---|
 | `Xeno.SDK` | MSBuild SDK: properties, targets, entry points, build task |
 | `XenoUI.Core`, `XenoUI.StandardLibrary` | Portable runtime |
-| `XenoUI.Platforms` | Android and iOS native hosts in a single multi-target package (`lib/net10.0-android`, `lib/net10.0-ios`); NuGet picks the one for the application's TFM |
+| `XenoUI.Platforms` | Android and iOS native hosts in a single multi-target package (`lib/net11.0-android`, `lib/net11.0-ios`); NuGet picks the one for the application's TFM |
 | `XenoUI.Media`, `XenoUI.Media.Android` | Optional media module (`XenoEnableMedia`) |
 | `XenoUI.Templates` | `dotnet new` / Visual Studio templates |
 | `XenoUI.Tooling` | The `xeno` .NET tool |
@@ -28,7 +28,7 @@ The simplest way is the `dotnet new xenoui` template, which generates the projec
 ```xml
 <Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
-    <TargetFramework>net10.0-android</TargetFramework>
+    <TargetFramework>net11.0-android</TargetFramework>
     <XenoAppId>com.example.myapp</XenoAppId>
     <XenoAppName>My App</XenoAppName>
     <ApplicationVersion>1</ApplicationVersion>
@@ -37,7 +37,7 @@ The simplest way is the `dotnet new xenoui` template, which generates the projec
 </Project>
 ```
 
-For Android and iOS: `TargetFrameworks=net10.0-android;net10.0-ios`, with the matching workloads installed. The SDK version can also be centralised in `global.json`:
+For Android and iOS: `TargetFrameworks=net11.0-android;net11.0-ios`, with the matching workloads installed. The SDK version can also be centralised in `global.json`:
 
 ```json
 { "msbuild-sdks": { "Xeno.SDK": "{{ xeno_version }}" } }
@@ -45,7 +45,7 @@ For Android and iOS: `TargetFrameworks=net10.0-android;net10.0-ios`, with the ma
 
 In that case use `<Project Sdk="Xeno.SDK">`, without repeating the version. Do not add `Xeno.SDK` as a plain `PackageReference`: the SDK takes part from the project evaluation onwards. No `NuGet.config` is needed: the default nuget.org source provides the SDK, the runtimes, SkiaSharp and the other dependencies.
 
-Add your `XenoApp`, your `XenoPage`s and `Assets/`, then `dotnet restore` and `dotnet build -f net10.0-android`. The identifier, versions and signing options remain the application's responsibility.
+Add your `XenoApp`, your `XenoPage`s and `Assets/`, then `dotnet restore` and `dotnet build -f net11.0-android`. The identifier, versions and signing options remain the application's responsibility.
 
 To move to a new version, change `global.json` (or the `Sdk` attribute) then run `dotnet restore`. Do not delete the global NuGet cache to update the SDK.
 
@@ -88,9 +88,9 @@ When you use `XenoPermission`, declare custom manifest paths in the `.csproj`, n
 ## Checking a project
 
 ```powershell
-dotnet msbuild MyApp.csproj -p:TargetFramework=net10.0-android `
+dotnet msbuild MyApp.csproj -p:TargetFramework=net11.0-android `
   -getProperty:ApplicationId -getProperty:AndroidApplication
-dotnet build MyApp.csproj -f net10.0-android
+dotnet build MyApp.csproj -f net11.0-android
 ```
 
 Having an MSBuild SDK does not by itself guarantee an IDE's device picker or debugger: to launch on a device, use `xeno run` ([installation](installation.md#5-installing-the-xeno-tool)) or your IDE's Android tools; see also [tooling](architecture/tooling-and-platforms.md).

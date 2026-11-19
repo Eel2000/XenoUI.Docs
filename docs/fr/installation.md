@@ -24,10 +24,10 @@ Les runtimes ne s’ajoutent jamais en `PackageReference` : `Xeno.SDK` choisit l
 
 | Pour… | Il faut |
 |---|---|
-| Tout | SDK .NET 10 (`dotnet --version` ≥ 10.0) |
+| Tout | SDK .NET 11 (`dotnet --version` ≥ 10.0) |
 | Android | `dotnet workload install android`, un Android SDK avec platform-tools, un émulateur ou un téléphone en débogage USB |
 | iOS | `dotnet workload install ios` ; construire, signer et lancer une app exige **macOS + Xcode** |
-| Previewer | Visual Studio 2022 17.14+ ou Visual Studio 2026 (Windows x64/arm64) ; le runtime .NET 10 (fourni par le SDK .NET 10) |
+| Previewer | Visual Studio 2022 17.14+ ou Visual Studio 2026 (Windows x64/arm64) ; le runtime .NET 11 (fourni par le SDK .NET 11) |
 
 ```powershell
 dotnet --version
@@ -52,10 +52,10 @@ Mise à jour : réinstallez la nouvelle version (`dotnet new install ...` rempla
 ```powershell
 dotnet new xenoui -n MyApp
 cd MyApp
-dotnet build -f net10.0-android
+dotnet build -f net11.0-android
 ```
 
-Dans Visual Studio : *Créer un projet* › « XenoUI App » ; les mêmes options apparaissent dans l’assistant. `--ios` ajoute `net10.0-ios`, `--appId com.example.myapp` fixe l’identifiant. Voir [Visual Studio](visual-studio.md#créer-un-projet).
+Dans Visual Studio : *Créer un projet* › « XenoUI App » ; les mêmes options apparaissent dans l’assistant. `--ios` ajoute `net11.0-ios`, `--appId com.example.myapp` fixe l’identifiant. Voir [Visual Studio](visual-studio.md#créer-un-projet).
 
 ### Ce que le template met en place
 
@@ -78,7 +78,7 @@ Le **SDK s’installe tout seul** : au premier `restore`/`build`, MSBuild lit la
    { "msbuild-sdks": { "Xeno.SDK": "{{ xeno_version }}" } }
    ```
 
-2. Remplacez l’en-tête du projet par `<Project Sdk="Xeno.SDK">` et fixez `TargetFramework` (`net10.0-android`, `net10.0-ios` ou les deux).
+2. Remplacez l’en-tête du projet par `<Project Sdk="Xeno.SDK">` et fixez `TargetFramework` (`net11.0-android`, `net11.0-ios` ou les deux).
 
 Aucun `NuGet.config` n’est nécessaire : la source nuget.org par défaut suffit. Toutes les propriétés (`XenoAppId`, `XenoAppName`, minimums OS, permissions, assets, média) sont décrites dans [Xeno.SDK](xeno-sdk.md).
 
@@ -115,7 +115,7 @@ Les attributs `[Preview]` sont déjà utilisables dans votre code : ils n’ont 
 ```powershell
 dotnet new xenoui -n Check
 cd Check
-dotnet build -f net10.0-android            # SDK + runtimes restaurés depuis nuget.org, APK compilé
+dotnet build -f net11.0-android            # SDK + runtimes restaurés depuis nuget.org, APK compilé
 xeno devices                               # outil installé
 xeno run --project Check.csproj --device <device-id>
 ```
@@ -130,7 +130,7 @@ xeno run --project Check.csproj --device <device-id>
 | `dotnet new xenoui` inconnu | Templates non installés (§ 3) ou autre ruche : `dotnet new list xenoui` |
 | `xeno` introuvable | Ouvrez un nouveau terminal (PATH des outils globaux : `%USERPROFILE%\.dotnet\tools`) |
 | Fenêtre XenoUI Preview : « Ce fichier n’appartient pas à un projet Xeno.SDK » | Le `.csproj` le plus proche n’utilise pas `Sdk="Xeno.SDK"` |
-| Fenêtre XenoUI Preview : « Le serveur d’aperçu s’est arrêté » | Runtime .NET 10 absent du `dotnet` du PATH, ou aperçu bloqué plus de 10 s ; le serveur redémarre à la modification suivante |
+| Fenêtre XenoUI Preview : « Le serveur d’aperçu s’est arrêté » | Runtime .NET 11 absent du `dotnet` du PATH, ou aperçu bloqué plus de 10 s ; le serveur redémarre à la modification suivante |
 | Fenêtre XenoUI Preview : « … n’est pas restauré … runtime embarqué » | Le projet n’a jamais été restauré : lancez un build ou `dotnet restore` pour que l’aperçu utilise la version de XenoUI du projet |
 | Aperçu de page : `NullReferenceException` avec un indice « OnPreview » | L’état lu par la page est préparé dans `OnStart`, qui ne s’exécute pas en aperçu : préparez-le dans `protected override void OnPreview()` de votre `App` ([détails](visual-studio.md#pages-et-application-en-aperçu)) |
 | Fenêtre XenoUI Preview : « Aucun [Preview] dans ce fichier » | Ajoutez `[Preview]` à une méthode `static` sans paramètre retournant `XenoComponent`, ou à une `XenoPage` |

@@ -17,6 +17,10 @@ This index is the official entry point to the XenoUI documentation. It separates
 7. [Constrained text and typed parameters](text-layout-navigation.md): wrap, ellipsis, AutoSize, navigation payloads and the space reserved for the BottomBar.
 8. [Visual Studio](visual-studio.md): project and item templates, `[Preview]` and the XenoUI Preview window.
    [VS Code](vscode.md): XenoUI Preview panel and project, page and component creation on macOS, Linux and Windows.
+9. [Creating a component](components.md): shape, parameters, state, slots, layout, interaction, lists, previews, recipes and pitfalls.
+10. [Customising a component](customization.md): modifiers, options, shapes, shadows, theme, fonts, variants, visual states.
+11. [Animations and motion](animations.md): page transitions, navigation selection, overlays, application animations, reduced motion.
+12. [Learning from the SampleApp](sample-app.md): guided tour of the reference application, patterns to copy, cautions and a step-by-step exercise.
 
 ### Framework contributor
 
@@ -40,6 +44,10 @@ This index is the official entry point to the XenoUI documentation. It separates
 | [Xeno.SDK](xeno-sdk.md) | **Canonical, nuget.org preview** | Configuration of the MSBuild SDK |
 | [Visual Studio](visual-studio.md) | **Canonical, preview** | Templates, `[Preview]` and the XenoUI Preview extension |
 | [VS Code](vscode.md) | **Canonical, pre-release** | XenoUI extension for VS Code: previews, templates, devices |
+| [Creating a component](components.md) | **Canonical** | Writing a reusable component |
+| [Customising a component](customization.md) | **Canonical** | Adapting look and behaviour |
+| [Animations and motion](animations.md) | **Canonical** | What the framework animates, and how to animate the rest |
+| [Learning from the SampleApp](sample-app.md) | **Canonical** | Guided tour of the reference application |
 | [Navigation and NavigationScaffold](navigation-scaffold.md) | **Canonical** | Navigation API, transitions, Scaffold and lifecycle |
 | [Troubleshooting](troubleshooting.md) | **Canonical** | Operational diagnosis |
 | [Architecture module](architecture/index.md) | **Canonical** | Internal reference and contribution guide |

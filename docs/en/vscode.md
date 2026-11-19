@@ -10,7 +10,7 @@ The **XenoUI** extension for Visual Studio Code brings to macOS, Linux and Windo
 
 > **Status: pre-release `{{ vscode_extension_version }}` published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=EliezerBwana.xenoui).** The extension has its own version number; it creates projects with `Xeno.SDK` `{{ xeno_version }}`.
 >
-> Prerequisites: VS Code 1.95+ and the .NET 10 SDK (previews compile against its reference assemblies; project creation uses `dotnet new`). The server, the protocol client, the templates and item creation are tested on macOS, and the Windows package on Windows; the panel on Linux still has to be validated.
+> Prerequisites: VS Code 1.95+ and the .NET 11 SDK (previews compile against its reference assemblies; project creation uses `dotnet new`). The server, the protocol client, the templates and item creation are tested on macOS, and the Windows package on Windows; the panel on Linux still has to be validated.
 
 ## Installing
 
@@ -58,7 +58,7 @@ Nothing is computed while the panel is hidden. The `[Preview]` attribute, page p
 ```mermaid
 flowchart LR
     Code[VS Code] --> Ext[XenoUI extension<br/>extension host]
-    Ext -- JSON lines stdin/stdout --> Srv[XenoUI.PreviewServer<br/>dedicated .NET 10 process]
+    Ext -- JSON lines stdin/stdout --> Srv[XenoUI.PreviewServer<br/>dedicated .NET 11 process]
     Srv -- PNG --> Ext
     Ext -- webview --> Panel[XenoUI Preview panel]
 ```
@@ -76,6 +76,6 @@ Measured on a sample application (macOS, Intel): first render about 10 s, then ~
 ## Limits
 
 - Those of the render server: see [Visual Studio › Limits](visual-studio.md#limits).
-- The server is started with the `dotnet` command on the `PATH`; without a .NET 10 runtime, the panel says so.
+- The server is started with the `dotnet` command on the `PATH`; without a .NET 11 runtime, the panel says so.
 - The creation commands use `dotnet new`: an Android project then builds with the Android workload, an iOS project requires macOS and Xcode.
 - Launching on a device (status bar, **XenoUI: Run on Selected Device**) only applies to Android projects.

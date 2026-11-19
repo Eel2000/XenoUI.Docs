@@ -10,7 +10,7 @@ L’extension **XenoUI** pour Visual Studio Code apporte sur macOS, Linux et Win
 
 > **Statut : pré-version `{{ vscode_extension_version }}` publiée sur le [Marketplace VS Code](https://marketplace.visualstudio.com/items?itemName=EliezerBwana.xenoui).** L’extension a son propre numéro de version ; elle crée des projets avec `Xeno.SDK` `{{ xeno_version }}`.
 >
-> Prérequis : VS Code 1.95+ et le SDK .NET 10 (l’aperçu compile avec ses assemblies de référence ; la création de projets utilise `dotnet new`). Le serveur, le client du protocole, les templates et la création d’éléments sont testés sur macOS, et le paquet Windows sous Windows ; le panneau sous Linux reste à valider.
+> Prérequis : VS Code 1.95+ et le SDK .NET 11 (l’aperçu compile avec ses assemblies de référence ; la création de projets utilise `dotnet new`). Le serveur, le client du protocole, les templates et la création d’éléments sont testés sur macOS, et le paquet Windows sous Windows ; le panneau sous Linux reste à valider.
 
 ## Installer
 
@@ -58,7 +58,7 @@ Rien n’est calculé tant que le panneau est masqué. L’attribut `[Preview]`,
 ```mermaid
 flowchart LR
     Code[VS Code] --> Ext[Extension XenoUI<br/>hôte d'extensions]
-    Ext -- JSON lignes stdin/stdout --> Srv[XenoUI.PreviewServer<br/>processus .NET 10 dédié]
+    Ext -- JSON lignes stdin/stdout --> Srv[XenoUI.PreviewServer<br/>processus .NET 11 dédié]
     Srv -- PNG --> Ext
     Ext -- webview --> Panel[Panneau XenoUI Preview]
 ```
@@ -76,6 +76,6 @@ Mesuré sur une application d’exemple (macOS, Intel) : premier rendu d’envir
 ## Limites
 
 - Celles du serveur de rendu : voir [Visual Studio › Limites](visual-studio.md#limites).
-- Le serveur est lancé avec la commande `dotnet` du `PATH` ; sans runtime .NET 10, le panneau l’indique.
+- Le serveur est lancé avec la commande `dotnet` du `PATH` ; sans runtime .NET 11, le panneau l’indique.
 - Les commandes de création utilisent `dotnet new` : un projet Android se construit ensuite avec le workload Android, un projet iOS exige macOS et Xcode.
 - Le lancement sur appareil (barre d’état, **XenoUI: Run on Selected Device**) ne concerne que les projets Android.

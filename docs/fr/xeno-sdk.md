@@ -6,7 +6,7 @@
 
 ## Statut et prérequis
 
-Version actuelle : `{{ xeno_version }}`, publiée sur nuget.org. Il faut .NET 10 et le workload de la plateforme ciblée. Le SDK ne télécharge pas silencieusement de workload, Android SDK ou Xcode. Un build/signature/exécution d'application iOS exige toujours macOS et Xcode ; évaluer un projet iOS sur Windows n'est pas une validation de l'application iOS.
+Version actuelle : `{{ xeno_version }}`, publiée sur nuget.org. Il faut .NET 11 et le workload de la plateforme ciblée. Le SDK ne télécharge pas silencieusement de workload, Android SDK ou Xcode. Un build/signature/exécution d'application iOS exige toujours macOS et Xcode ; évaluer un projet iOS sur Windows n'est pas une validation de l'application iOS.
 
 Les packages publiés partagent tous la même version :
 
@@ -14,7 +14,7 @@ Les packages publiés partagent tous la même version :
 |---|---|
 | `Xeno.SDK` | SDK MSBuild : propriétés, targets, points d'entrée, tâche de build |
 | `XenoUI.Core`, `XenoUI.StandardLibrary` | Runtime portable |
-| `XenoUI.Platforms` | Hôtes natifs Android et iOS dans un seul package multi-cible (`lib/net10.0-android`, `lib/net10.0-ios`) ; NuGet choisit celui du TFM de l'application |
+| `XenoUI.Platforms` | Hôtes natifs Android et iOS dans un seul package multi-cible (`lib/net11.0-android`, `lib/net11.0-ios`) ; NuGet choisit celui du TFM de l'application |
 | `XenoUI.Media`, `XenoUI.Media.Android` | Module média optionnel (`XenoEnableMedia`) |
 | `XenoUI.Templates` | Templates `dotnet new` / Visual Studio |
 | `XenoUI.Tooling` | Outil .NET `xeno` |
@@ -28,7 +28,7 @@ Le plus simple est le template `dotnet new xenoui`, qui génère le projet et `g
 ```xml
 <Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
-    <TargetFramework>net10.0-android</TargetFramework>
+    <TargetFramework>net11.0-android</TargetFramework>
     <XenoAppId>com.example.myapp</XenoAppId>
     <XenoAppName>My App</XenoAppName>
     <ApplicationVersion>1</ApplicationVersion>
@@ -37,7 +37,7 @@ Le plus simple est le template `dotnet new xenoui`, qui génère le projet et `g
 </Project>
 ```
 
-Pour Android et iOS : `TargetFrameworks=net10.0-android;net10.0-ios`, avec les workloads correspondants installés. La version SDK peut aussi être centralisée dans `global.json` :
+Pour Android et iOS : `TargetFrameworks=net11.0-android;net11.0-ios`, avec les workloads correspondants installés. La version SDK peut aussi être centralisée dans `global.json` :
 
 ```json
 { "msbuild-sdks": { "Xeno.SDK": "{{ xeno_version }}" } }
@@ -45,7 +45,7 @@ Pour Android et iOS : `TargetFrameworks=net10.0-android;net10.0-ios`, avec les w
 
 Dans ce cas utilisez `<Project Sdk="Xeno.SDK">`, sans répéter la version. Il ne faut pas ajouter `Xeno.SDK` comme une simple `PackageReference` : le SDK intervient dès l'évaluation du projet. Aucun `NuGet.config` n'est nécessaire : la source nuget.org par défaut fournit le SDK, les runtimes, SkiaSharp et les autres dépendances.
 
-Ajoutez votre `XenoApp`, vos `XenoPage` et `Assets/`, puis `dotnet restore` et `dotnet build -f net10.0-android`. L'identifiant, les versions et les options de signature demeurent la responsabilité de l'application.
+Ajoutez votre `XenoApp`, vos `XenoPage` et `Assets/`, puis `dotnet restore` et `dotnet build -f net11.0-android`. L'identifiant, les versions et les options de signature demeurent la responsabilité de l'application.
 
 Pour passer à une nouvelle version, modifiez `global.json` (ou l'attribut `Sdk`) puis `dotnet restore`. Ne supprimez pas le cache NuGet global pour mettre le SDK à jour.
 
@@ -88,9 +88,9 @@ Lorsque vous utilisez `XenoPermission`, déclarez les chemins de manifests perso
 ## Vérifier un projet
 
 ```powershell
-dotnet msbuild MyApp.csproj -p:TargetFramework=net10.0-android `
+dotnet msbuild MyApp.csproj -p:TargetFramework=net11.0-android `
   -getProperty:ApplicationId -getProperty:AndroidApplication
-dotnet build MyApp.csproj -f net10.0-android
+dotnet build MyApp.csproj -f net11.0-android
 ```
 
 La présence d'un SDK MSBuild ne garantit pas à elle seule le sélecteur d'appareils ou le debugger d'un IDE : pour lancer sur un appareil, utilisez `xeno run` ([installation](installation.md#5-installer-loutil-xeno)) ou les outils Android de votre IDE ; voir aussi [le tooling](architecture/tooling-and-platforms.md).

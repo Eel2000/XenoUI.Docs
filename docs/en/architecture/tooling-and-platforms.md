@@ -105,7 +105,7 @@ The architecture must stay ready for SceneDelegate/multi-window, but the static 
 ```text
 xeno devices [--json] [--watch]
 xeno run --project <path> --device <id>
-         [--framework net10.0-android]
+         [--framework net11.0-android]
          [--configuration Debug]
          [--no-build]
 ```
@@ -155,7 +155,7 @@ Visual Studio relies first on MSBuild and the standard workloads. XenoUI exposes
 - `ProjectCapability Include="XenoUI"`;
 - a recognised Android target and `AndroidApplication=true`.
 
-The **XenoUI Preview** extension (VisualStudio.Extensibility, out of process, coming soon to the Visual Studio Marketplace) adds the **XenoUI Preview** window. It delegates all computation to `XenoUI.PreviewServer`, a dedicated .NET 10 process it starts, watches and restarts: in-memory Roslyn compilation of the project sources, collectible `AssemblyLoadContext`, headless rendering by `XenoUI.Core.Preview.PreviewRenderer`, one-line-per-message JSON protocol over stdin/stdout. The server does not evaluate MSBuild, does not build the project and only runs `[Preview]` members. See [Visual Studio](../visual-studio.md).
+The **XenoUI Preview** extension (VisualStudio.Extensibility, out of process, coming soon to the Visual Studio Marketplace) adds the **XenoUI Preview** window. It delegates all computation to `XenoUI.PreviewServer`, a dedicated .NET 11 process it starts, watches and restarts: in-memory Roslyn compilation of the project sources, collectible `AssemblyLoadContext`, headless rendering by `XenoUI.Core.Preview.PreviewRenderer`, one-line-per-message JSON protocol over stdin/stdout. The server does not evaluate MSBuild, does not build the project and only runs `[Preview]` members. See [Visual Studio](../visual-studio.md).
 
 The `XenoUI.Templates` templates (`xenoui`, `xenoui-page`, `xenoui-component`) are `dotnet new` templates; Visual Studio shows them through `ide.host.json`.
 

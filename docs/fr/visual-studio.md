@@ -9,7 +9,7 @@ XenoUI fournit deux éléments pour Visual Studio :
 - **des templates** `dotnet new`, visibles dans *Créer un projet* et *Ajouter › Nouvel élément* : « XenoUI App », « XenoUI Page » et « XenoUI Component » ;
 - **l’extension XenoUI Preview** : une fenêtre d’outil qui affiche, pendant la frappe, les composants et pages marqués `[Preview]`, comme les aperçus Compose d’Android Studio. Elle ne compile pas le projet par MSBuild et ne lance ni l’application, ni un émulateur.
 
-> **Statut : `{{ xeno_version }}`.** Les templates sont publiés sur [nuget.org](https://www.nuget.org/packages/XenoUI.Templates) ; l’extension XenoUI Preview n’est pas encore ouverte au public et arrivera bientôt sur le Visual Studio Marketplace. En attendant, les mêmes aperçus sont disponibles sous Windows, macOS et Linux avec l’[extension VS Code](vscode.md). Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 10 (installé avec le SDK .NET 10) pour le serveur de rendu.
+> **Statut : `{{ xeno_version }}`.** Les templates sont publiés sur [nuget.org](https://www.nuget.org/packages/XenoUI.Templates) ; l’extension XenoUI Preview n’est pas encore ouverte au public et arrivera bientôt sur le Visual Studio Marketplace. En attendant, les mêmes aperçus sont disponibles sous Windows, macOS et Linux avec l’[extension VS Code](vscode.md). Prérequis : Visual Studio 2022 17.14 ou Visual Studio 2026, et le runtime .NET 11 (installé avec le SDK .NET 11) pour le serveur de rendu.
 
 ## Installer
 
@@ -31,7 +31,7 @@ dotnet new xenoui -n MyApp
 
 | Option | Effet |
 |---|---|
-| `--ios` | Ajoute `net10.0-ios` (workload iOS requis ; le build de l’app exige macOS et Xcode) |
+| `--ios` | Ajoute `net11.0-ios` (workload iOS requis ; le build de l’app exige macOS et Xcode) |
 | `--appId com.example.myapp` | Identifiant Android/iOS ; par défaut `com.companyname.<nom>` |
 | `--sdkVersion <version>` | Version de `Xeno.SDK` épinglée dans `global.json` ; par défaut celle du pack de templates |
 
@@ -124,7 +124,7 @@ Rien n’est calculé tant que la fenêtre est masquée.
 ```mermaid
 flowchart LR
     VS[devenv.exe] -- Remote UI --> Ext[Extension XenoUI<br/>hôte d'extensions VS]
-    Ext -- JSON lignes stdin/stdout --> Srv[XenoUI.PreviewServer<br/>processus .NET 10 dédié]
+    Ext -- JSON lignes stdin/stdout --> Srv[XenoUI.PreviewServer<br/>processus .NET 11 dédié]
     Srv --> Roslyn[Compilation en mémoire<br/>sources + assets]
     Srv --> ALC[AssemblyLoadContext collectible]
     ALC --> Engine[XenoEngine headless<br/>PreviewRenderer → PNG]
@@ -152,4 +152,4 @@ Ordres de grandeur mesurés (poste de développement, Release) : premier rendu ~
 - Le code des constructeurs (`App`, pages), d’`OnPreview`, `OnCreate` et `Body` s’exécute réellement dans le serveur de rendu : un appel réseau y partirait aussi. Protégez-le avec `Application.IsPreview`. Si du code d’aperçu garde des ressources vivantes (timers, requêtes), le serveur se recycle de lui-même après une vingtaine de rendus.
 - Le contenu chargé dans `OnActivated` ou `OnNavigatedTo` n’apparaît pas : l’aperçu montre l’état initial de la page.
 - Seuls les `[Preview]` du fichier actif sont affichés ; le changement d’onglet est détecté à la première interaction dans l’éditeur (ou avec `⟳`).
-- Le serveur est lancé avec la commande `dotnet` du `PATH` ; sans runtime .NET 10, la fenêtre affiche l’erreur de démarrage.
+- Le serveur est lancé avec la commande `dotnet` du `PATH` ; sans runtime .NET 11, la fenêtre affiche l’erreur de démarrage.

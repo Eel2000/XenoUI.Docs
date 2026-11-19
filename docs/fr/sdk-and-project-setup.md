@@ -50,7 +50,7 @@ A complete XenoUI app requires just 3 files:
   <Import Project="path/to/Sdk.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
+    <TargetFrameworks>net11.0-android;net11.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <XenoAppId>com.mycompany.myapp</XenoAppId>
     <XenoAppName>My App</XenoAppName>
@@ -233,7 +233,7 @@ sequenceDiagram
     participant Compiler as C# Compiler
     participant Linker as IL Linker
 
-    Dev->>MSBuild: dotnet build -f net10.0-ios
+    Dev->>MSBuild: dotnet build -f net11.0-ios
     MSBuild->>Props: Import (property evaluation)
     Note over Props: Set global usings,\nproject references,\ndefault properties
 
@@ -263,21 +263,21 @@ sequenceDiagram
 
 ```bash
 # iOS Simulator
-dotnet build samples/SampleApp/SampleApp.csproj -t:Run -f net10.0-ios
+dotnet build samples/SampleApp/SampleApp.csproj -t:Run -f net11.0-ios
 
 # Android Emulator  
-dotnet build samples/SampleApp/SampleApp.csproj -t:Run -f net10.0-android
+dotnet build samples/SampleApp/SampleApp.csproj -t:Run -f net11.0-android
 
 # Build only (no deploy)
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-ios
-dotnet build samples/SampleApp/SampleApp.csproj -f net10.0-android
+dotnet build samples/SampleApp/SampleApp.csproj -f net11.0-ios
+dotnet build samples/SampleApp/SampleApp.csproj -f net11.0-android
 ```
 
 ### From IDE (Rider / Visual Studio)
 
 1. Open `XenoUI.slnx`
 2. Set **SampleApp** as startup project
-3. Select target framework: `net10.0-ios` or `net10.0-android`
+3. Select target framework: `net11.0-ios` or `net11.0-android`
 4. Select device/simulator from the dropdown
 5. Press Run (▶️)
 

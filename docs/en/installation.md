@@ -24,10 +24,10 @@ Runtimes are never added as `PackageReference`: `Xeno.SDK` picks the right packa
 
 | For… | You need |
 |---|---|
-| Everything | .NET 10 SDK (`dotnet --version` ≥ 10.0) |
+| Everything | .NET 11 SDK (`dotnet --version` ≥ 10.0) |
 | Android | `dotnet workload install android`, an Android SDK with platform-tools, an emulator or a phone with USB debugging |
 | iOS | `dotnet workload install ios`; building, signing and launching an app requires **macOS + Xcode** |
-| Previewer | Visual Studio 2022 17.14+ or Visual Studio 2026 (Windows x64/arm64); the .NET 10 runtime (shipped with the .NET 10 SDK) |
+| Previewer | Visual Studio 2022 17.14+ or Visual Studio 2026 (Windows x64/arm64); the .NET 11 runtime (shipped with the .NET 11 SDK) |
 
 ```powershell
 dotnet --version
@@ -52,10 +52,10 @@ Update: install the new version (`dotnet new install ...` replaces the old one).
 ```powershell
 dotnet new xenoui -n MyApp
 cd MyApp
-dotnet build -f net10.0-android
+dotnet build -f net11.0-android
 ```
 
-In Visual Studio: *Create a new project* › "XenoUI App"; the same options appear in the wizard. `--ios` adds `net10.0-ios`, `--appId com.example.myapp` sets the identifier. See [Visual Studio](visual-studio.md#creating-a-project).
+In Visual Studio: *Create a new project* › "XenoUI App"; the same options appear in the wizard. `--ios` adds `net11.0-ios`, `--appId com.example.myapp` sets the identifier. See [Visual Studio](visual-studio.md#creating-a-project).
 
 ### What the template sets up
 
@@ -78,7 +78,7 @@ The **SDK installs itself**: on the first `restore`/`build`, MSBuild reads the v
    { "msbuild-sdks": { "Xeno.SDK": "{{ xeno_version }}" } }
    ```
 
-2. Replace the project header with `<Project Sdk="Xeno.SDK">` and set `TargetFramework` (`net10.0-android`, `net10.0-ios` or both).
+2. Replace the project header with `<Project Sdk="Xeno.SDK">` and set `TargetFramework` (`net11.0-android`, `net11.0-ios` or both).
 
 No `NuGet.config` is needed: the default nuget.org source is enough. All properties (`XenoAppId`, `XenoAppName`, OS minimums, permissions, assets, media) are described in [Xeno.SDK](xeno-sdk.md).
 
@@ -115,7 +115,7 @@ The extension neither builds nor launches the project: it starts its own render 
 ```powershell
 dotnet new xenoui -n Check
 cd Check
-dotnet build -f net10.0-android            # SDK + runtimes restored from nuget.org, APK compiled
+dotnet build -f net11.0-android            # SDK + runtimes restored from nuget.org, APK compiled
 xeno devices                               # tool installed
 xeno run --project Check.csproj --device <device-id>
 ```
@@ -130,7 +130,7 @@ xeno run --project Check.csproj --device <device-id>
 | `dotnet new xenoui` unknown | Templates not installed (§ 3) or another hive: `dotnet new list xenoui` |
 | `xeno` not found | Open a new terminal (global tools PATH: `%USERPROFILE%\.dotnet\tools`) |
 | XenoUI Preview window: "This file does not belong to a Xeno.SDK project" | The nearest `.csproj` does not use `Sdk="Xeno.SDK"` |
-| XenoUI Preview window: "The preview server stopped" | .NET 10 runtime missing from the `dotnet` on the PATH, or a preview blocked for more than 10 s; the server restarts on the next change |
+| XenoUI Preview window: "The preview server stopped" | .NET 11 runtime missing from the `dotnet` on the PATH, or a preview blocked for more than 10 s; the server restarts on the next change |
 | XenoUI Preview window: "… is not restored … embedded runtime" | The project was never restored: run a build or `dotnet restore` so the preview uses the project's XenoUI version |
 | Page preview: `NullReferenceException` with an "OnPreview" hint | The state the page reads is prepared in `OnStart`, which does not run in a preview: prepare it in `protected override void OnPreview()` of your `App` ([details](visual-studio.md#pages-and-the-application-in-a-preview)) |
 | XenoUI Preview window: "No [Preview] in this file" | Add `[Preview]` to a parameterless `static` method returning `XenoComponent`, or to a `XenoPage` |

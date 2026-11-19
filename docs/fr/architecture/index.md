@@ -52,8 +52,8 @@ flowchart TB
 |---|---|---|
 | `XenoUI.Core` | composition, ECS/cache, layout, rendu, input abstrait, texte, contrats natifs | types Android/UIKit, orchestration CLI/IDE |
 | `XenoUI.StandardLibrary` | widgets composés réutilisables et icônes | cycle de vie hôte ou appels OS directs |
-| `XenoUI.Platforms/Android` (`net10.0-android`) | surface Skia, cycle Activity/View, IME/clipboard Android, back natif | politique applicative multiplateforme |
-| `XenoUI.Platforms/iOS` (`net10.0-ios`) | surface UIKit/Skia, cycle UIView, IME/clipboard iOS | politique applicative multiplateforme |
+| `XenoUI.Platforms/Android` (`net11.0-android`) | surface Skia, cycle Activity/View, IME/clipboard Android, back natif | politique applicative multiplateforme |
+| `XenoUI.Platforms/iOS` (`net11.0-ios`) | surface UIKit/Skia, cycle UIView, IME/clipboard iOS | politique applicative multiplateforme |
 | `XenoUI.BuildTasks` | génération MSBuild déterministe | détection d’appareils ou runtime UI |
 | `Xeno.SDK` | expérience projet MSBuild, références NuGet, points d’entrée, assets | logique runtime |
 | `XenoUI.Tooling` | appareils et lancement hors processus | rendu ou état d’application |

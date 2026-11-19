@@ -21,7 +21,7 @@ xeno devices --json
 
 ### Le CLI voit la cible, pas Visual Studio
 
-- sélectionnez votre projet XenoUI, le TFM `net10.0-android` et une configuration déployable ;
+- sélectionnez votre projet XenoUI, le TFM `net11.0-android` et une configuration déployable ;
 - rechargez la solution après installation du workload ;
 - vérifiez que le projet évalué expose `AndroidApplication=true` ;
 - confirmez que le projet est coché *Déployer* dans le Gestionnaire de configurations de la solution ;
@@ -48,7 +48,7 @@ Le CLI recherche l’APK sous `bin/<Configuration>/<TFM>/<RID>/` et préfère `<
 
 ```powershell
 dotnet build MyApp.csproj `
-  -f net10.0-android -c Debug `
+  -f net11.0-android -c Debug `
   -p:RuntimeIdentifier=android-arm64
 ```
 
@@ -65,7 +65,7 @@ Avec `Xeno.SDK`, cette DLL est embarquée dans le package sous `tools/netstandar
 
 ```powershell
 dotnet restore MyApp.csproj
-dotnet build MyApp.csproj -f net10.0-android
+dotnet build MyApp.csproj -f net11.0-android
 ```
 
 Un chemin vers `bin/Debug` indique les anciens imports locaux d’avant `Xeno.SDK` : migrez le projet vers `<Project Sdk="Xeno.SDK">` ([Xeno.SDK](xeno-sdk.md)). Ne supprimez pas tout le cache NuGet.
@@ -77,7 +77,7 @@ Contrôlez le SDK, sa version et le TFM :
 ```xml
 <Project Sdk="Xeno.SDK/{{ xeno_version }}">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
+    <TargetFrameworks>net11.0-android;net11.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 </Project>
@@ -87,7 +87,7 @@ Puis inspectez l’évaluation :
 
 ```powershell
 dotnet msbuild path/to/App.csproj `
-  -p:TargetFramework=net10.0-android `
+  -p:TargetFramework=net11.0-android `
   -getProperty:AndroidApplication `
   -getProperty:ApplicationId
 ```
@@ -196,7 +196,7 @@ Lorsque le projet n’a pas de `Info.plist`, la cible SDK copie actuellement le 
 Après avoir sauvegardé les logs et vérifié qu’aucun travail utile ne réside dans les dossiers générés :
 
 ```powershell
-dotnet clean MyApp.csproj -f net10.0-android
+dotnet clean MyApp.csproj -f net11.0-android
 ```
 
 Préférez `dotnet clean` à une suppression manuelle large. Si vous devez supprimer `bin/obj`, ciblez uniquement le projet concerné.

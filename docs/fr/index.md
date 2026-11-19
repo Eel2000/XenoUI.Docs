@@ -17,6 +17,10 @@ Cet index est le point d’entrée officiel de la documentation XenoUI. Il disti
 7. [Texte contraint et paramètres typés](text-layout-navigation.md) : wrap, ellipsis, AutoSize, payloads de navigation et espace réservé à la BottomBar.
 8. [Visual Studio](visual-studio.md) : templates de projet et d’éléments, `[Preview]` et fenêtre XenoUI Preview.
    [VS Code](vscode.md) : panneau XenoUI Preview et création de projets, pages et composants sur macOS, Linux et Windows.
+9. [Créer un composant](components.md) : forme, paramètres, état, slots, layout, interaction, listes, aperçus, recettes et pièges.
+10. [Personnaliser un composant](customization.md) : modificateurs, options, formes, ombres, thème, polices, variantes, états visuels.
+11. [Animations et mouvement](animations.md) : transitions de pages, sélection de navigation, overlays, animations d’application, mouvement réduit.
+12. [Apprendre par le SampleApp](sample-app.md) : parcours guidé de l’application de référence, motifs à copier, précautions et exercice pas à pas.
 
 ### Contributeur framework
 
@@ -40,6 +44,10 @@ Cet index est le point d’entrée officiel de la documentation XenoUI. Il disti
 | [Xeno.SDK](xeno-sdk.md) | **Canonique, preview nuget.org** | Configuration du SDK MSBuild |
 | [Visual Studio](visual-studio.md) | **Canonique, preview** | Templates, `[Preview]` et extension XenoUI Preview |
 | [VS Code](vscode.md) | **Canonique, pré-version** | Extension XenoUI pour VS Code : aperçus, templates, appareils |
+| [Créer un composant](components.md) | **Canonique** | Écrire un composant réutilisable |
+| [Personnaliser un composant](customization.md) | **Canonique** | Adapter apparence et comportement |
+| [Animations et mouvement](animations.md) | **Canonique** | Ce que le framework anime, et comment animer le reste |
+| [Apprendre par le SampleApp](sample-app.md) | **Canonique** | Parcours guidé de l’application de référence |
 | [Navigation et NavigationScaffold](navigation-scaffold.md) | **Canonique** | API de navigation, transitions, Scaffold et lifecycle |
 | [Dépannage](troubleshooting.md) | **Canonique** | Diagnostic opérationnel |
 | [Module d’architecture](architecture/index.md) | **Canonique** | Référence interne et guide de contribution |

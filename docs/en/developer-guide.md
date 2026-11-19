@@ -21,7 +21,7 @@ Android is the validated reference path. iOS requires macOS/Xcode and is not yet
 
 ### Common
 
-- .NET 10 SDK (`dotnet --version`);
+- .NET 11 SDK (`dotnet --version`);
 - the workload matching the target;
 - an optional IDE: Visual Studio or VS Code with C# Dev Kit.
 
@@ -35,7 +35,7 @@ Only install `ios` on a machine able to build iOS. Compiling and running iOS req
 
 ### Android
 
-- Android SDK, platform-tools and at least one Android platform;
+- Android SDK, platform-tools and the **API 37** Android platform (required by `net11.0-android`);
 - `adb` reachable through `ANDROID_SDK_ROOT`, `ANDROID_HOME`, the standard user SDK location or the `PATH`;
 - a running emulator or a phone with Developer options and USB debugging.
 
@@ -47,6 +47,18 @@ xeno devices
 ```
 
 An `unauthorized` phone must be unlocked; then accept the "Allow USB debugging" RSA fingerprint.
+
+#### Android runtime: CoreCLR
+
+After `0.1.0-preview.6`, `Xeno.SDK` targets .NET 11 and runs Android applications on **CoreCLR**: it sets `UseMonoRuntime=false` for any Android application that has not set it. The workload's `Microsoft.Android.Runtime.CoreCLR.*` packs are therefore required. To go back to Mono:
+
+```xml
+<PropertyGroup>
+  <UseMonoRuntime>true</UseMonoRuntime>
+</PropertyGroup>
+```
+
+If `dotnet build` answers `NETSDK1147` or `XA5207` (API 37 platform missing), run `dotnet workload restore <project>` then `dotnet build <project> -t:InstallAndroidDependencies -f net11.0-android -p:AndroidSdkDirectory=<sdk>`. The benchmark figures date from the .NET 10 Mono runtime; they are not CoreCLR measurements.
 
 ## 3. Installing the tools
 
@@ -72,7 +84,7 @@ The generated project uses the `Xeno.SDK` MSBuild SDK, restored from nuget.org. 
 <Project Sdk="Xeno.SDK/{{ xeno_version }}">
 
   <PropertyGroup>
-    <TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
+    <TargetFrameworks>net11.0-android;net11.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <XenoAppId>com.example.myapp</XenoAppId>
     <XenoAppName>My Xeno App</XenoAppName>
@@ -150,7 +162,7 @@ Build then install/launch:
 xeno run `
   --project MyApp.csproj `
   --device <device-id> `
-  --framework net10.0-android `
+  --framework net11.0-android `
   --configuration Debug
 ```
 
@@ -161,8 +173,8 @@ The CLI picks the RID from the target ABI (`android-arm64`, `android-x64`, etc.)
 On macOS:
 
 ```bash
-dotnet restore MyApp.csproj -p:TargetFramework=net10.0-ios
-dotnet build MyApp.csproj -f net10.0-ios
+dotnet restore MyApp.csproj -p:TargetFramework=net11.0-ios
+dotnet build MyApp.csproj -f net11.0-ios
 ```
 
 The `xeno` CLI has no iOS provider yet. Use the .NET/iOS tools and Xcode to select, sign and launch the target. Do not treat an iOS compilation from Windows as a runtime validation.
@@ -229,6 +241,8 @@ Button("Save", Save, fontSize: 16, textColor: 0xFFFFFFFF)
 ```
 
 The standard button gives pressed feedback by darkening. It returns a normal component: every modifier remains available.
+
+To go further: [write your own components](components.md), [customise them](customization.md) and [animate them](animations.md). To see all of it in a complete application, follow the [SampleApp tour](sample-app.md).
 
 ## 7. State, updates and rebuilding
 
@@ -499,7 +513,7 @@ With C# Dev Kit, build and launch from the integrated terminal with `xeno run` (
 
 ```powershell
 dotnet build MyApp.csproj `
-  -f net10.0-android -v:diagnostic
+  -f net11.0-android -v:diagnostic
 ```
 
 ### Android logs
@@ -514,7 +528,7 @@ adb logcat --pid=<pid>
 
 ```powershell
 dotnet msbuild MyApp.csproj `
-  -p:TargetFramework=net10.0-android `
+  -p:TargetFramework=net11.0-android `
   -getProperty:ApplicationId
 ```
 
