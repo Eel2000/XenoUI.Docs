@@ -99,8 +99,11 @@ dotnet publish NotesApp.csproj -f net11.0-android -c Release `
   -p:AndroidPackageFormats=aab
 ```
 
-(`env:NAME` makes the Android build read the password from an environment variable; these are the standard .NET for Android
-properties.)
+These are the standard .NET for Android properties; their names are present in the Android SDK 37.2.31 build targets
+(`AndroidKeyStore`, `AndroidSigningKeyStore`, `AndroidSigningKeyAlias`, `AndroidSigningKeyPass`, `AndroidSigningStorePass`,
+`AndroidPackageFormats`). The password values use the SDK's prefixed forms (`env:NAME` to read an environment variable,
+`file:path` to read a file): confirm the exact forms in Microsoft's documentation for your SDK version, and never put a
+literal password on a command line that is logged.
 
 | Package | Property value | Use |
 |---|---|---|

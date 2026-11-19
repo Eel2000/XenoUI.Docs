@@ -101,7 +101,11 @@ dotnet publish NotesApp.csproj -f net11.0-android -c Release `
   -p:AndroidPackageFormats=aab
 ```
 
-(`env:NOM` fait lire le mot de passe dans une variable d’environnement ; ce sont les propriétés standard de .NET pour Android.)
+Ce sont les propriétés standard de .NET pour Android ; leurs noms sont présents dans les cibles de build du SDK Android 37.2.31
+(`AndroidKeyStore`, `AndroidSigningKeyStore`, `AndroidSigningKeyAlias`, `AndroidSigningKeyPass`, `AndroidSigningStorePass`,
+`AndroidPackageFormats`). Les mots de passe utilisent les formes préfixées du SDK (`env:NOM` pour lire une variable
+d’environnement, `file:chemin` pour lire un fichier) : confirmez les formes exactes dans la documentation Microsoft pour votre
+version du SDK, et ne mettez jamais de mot de passe en clair sur une ligne de commande journalisée.
 
 | Paquet | Valeur de propriété | Usage |
 |---|---|---|
