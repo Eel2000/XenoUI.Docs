@@ -42,3 +42,9 @@ headers; the summaries come from the English source comments and stay in English
 files: add a line when a new namespace appears.
 
 Improve the reference by writing better `/// <summary>` comments in the XenoUI source, then regenerate.
+
+## CI
+
+The workflow `.github/workflows/snippets.yml` runs `DocSnippets` when `tools/DocSnippets` or the tutorial change (or by hand, with a
+chosen XenoUI ref). The XenoUI repository is private, so add a fine-grained, read-only personal access token for it as the
+repository secret `XENOUI_READ_TOKEN`; without it the job reports a notice and skips the check.

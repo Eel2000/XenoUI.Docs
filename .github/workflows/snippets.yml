@@ -3,6 +3,10 @@ name: Check documentation snippets
 # Compiles the tutorial samples (tools/DocSnippets) against a XenoUI checkout and renders the screenshots.
 # It runs when the tools or the tutorial change, and can be started by hand with another XenoUI ref. It is a
 # separate workflow: the site deployment does not depend on it. The default ref must target the .NET version below.
+#
+# The XenoUI repository is private, so the checkout needs a read-only token stored as the repository secret
+# XENOUI_READ_TOKEN (a fine-grained personal access token with read access to Eel2000/XenoUI, "Contents: read").
+# Without the secret the job reports a notice and skips the check instead of failing the repository.
 
 on:
   push:
@@ -27,24 +31,39 @@ permissions:
 jobs:
   snippets:
     runs-on: ubuntu-latest
+    env:
+      XENOUI_READ_TOKEN: ${{ secrets.XENOUI_READ_TOKEN }}
     steps:
+      - name: Check for the XenoUI read token
+        id: token
+        run: |
+          if [ -n "$XENOUI_READ_TOKEN" ]; then echo "present=true" >> "$GITHUB_OUTPUT"
+          else echo "::notice title=Snippet check skipped::Add the repository secret XENOUI_READ_TOKEN (read access to Eel2000/XenoUI) to enable it."
+          fi
       - uses: actions/checkout@v4
+        if: steps.token.outputs.present == 'true'
         with:
           path: XenoUI.Docs
       - uses: actions/checkout@v4
+        if: steps.token.outputs.present == 'true'
         with:
           repository: Eel2000/XenoUI
           ref: ${{ inputs.xenoui_ref || 'feat/dotnet11-coreclr-android' }}
+          token: ${{ secrets.XENOUI_READ_TOKEN }}
           path: XenoUI
       - uses: actions/setup-dotnet@v4
+        if: steps.token.outputs.present == 'true'
         with:
           dotnet-version: ${{ inputs.dotnet_version || '11.0.x' }}
           dotnet-quality: preview
       - name: Compile the samples
+        if: steps.token.outputs.present == 'true'
         run: dotnet build XenoUI.Docs/tools/DocSnippets/DocSnippets.csproj -c Release
       - name: Render the screenshots
+        if: steps.token.outputs.present == 'true'
         run: dotnet run --project XenoUI.Docs/tools/DocSnippets/DocSnippets.csproj -c Release --no-build -- "$RUNNER_TEMP/img"
       - uses: actions/upload-artifact@v4
+        if: steps.token.outputs.present == 'true'
         with:
           name: screenshots
           path: ${{ runner.temp }}/img
