@@ -264,7 +264,7 @@ They therefore never live in `View()`/`Body()`.
 
 ### 5.1 State owned by the caller (recommended)
 
-The component receives `State<T>` as a parameter (see [§4.2](#42-reactive-states-statet)). The component is a plain
+The component receives `State<T>` as a parameter (see [§4.2](#42-reactive-states-state)). The component is a plain
 function, trivial to preview (`View(UseState(42), () => { })`).
 
 ### 5.2 State owned by an instance held by the page

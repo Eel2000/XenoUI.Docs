@@ -242,7 +242,7 @@ Button("Save", Save, fontSize: 16, textColor: 0xFFFFFFFF)
 
 The standard button gives pressed feedback by darkening. It returns a normal component: every modifier remains available.
 
-To go further: [write your own components](components.md), [customise them](customization.md) and [animate them](animations.md). To see all of it in a complete application, follow the [SampleApp tour](sample-app.md).
+To go further: [thinking in XenoUI](thinking-in-xenoui.md), [state](state.md), [lifecycle](lifecycle.md), [layouts](layouts.md), [write your own components](components.md), [customise them](customization.md) and [animate them](animations.md). To see all of it in a complete application, follow the [SampleApp tour](sample-app.md).
 
 ## 7. State, updates and rebuilding
 

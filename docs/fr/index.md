@@ -4,6 +4,17 @@
 
 Cet index est le point d’entrée officiel de la documentation XenoUI. Il distingue les documents de référence actuels des notes historiques afin d’éviter qu’un ancien plan soit pris pour le comportement du code.
 
+## Parcourir par thème
+
+| Thème | Pour commencer |
+|---|---|
+| **Démarrer** | [Installation](installation.md) · [Guide développeur](developer-guide.md) · [Apprendre par le SampleApp](sample-app.md) |
+| **Fondamentaux** | [Penser en XenoUI](thinking-in-xenoui.md) · [État et reconstruction](state.md) · [Cycle de vie](lifecycle.md) · [Effets de bord et travail asynchrone](side-effects.md) |
+| **Construire l’interface** | [Créer un composant](components.md) · [Mises en page](layouts.md) · [Personnaliser](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) |
+| **Architecture et qualité** | [Architecture d’une application](app-architecture.md) · [Tester](testing.md) · [Performance](performance.md) |
+| **Venir d’Android** | [De Jetpack Compose à XenoUI](compose-comparison.md) |
+| **Outils** | [Xeno.SDK](xeno-sdk.md) · [Visual Studio](visual-studio.md) · [VS Code](vscode.md) |
+
 ## Parcours recommandés
 
 ### Développeur d’application

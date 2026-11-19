@@ -268,7 +268,7 @@ aux reconstructions**. Ils ne vivent donc jamais dans `View()`/`Body()`.
 
 ### 5.1 L’état est possédé par l’appelant (recommandé)
 
-Le composant reçoit `State<T>` en paramètre (voir [§4.2](#42-états-réactifs--statet)). Le composant est une
+Le composant reçoit `State<T>` en paramètre (voir [§4.2](#42-états-réactifs--state)). Le composant est une
 simple fonction, trivial à prévisualiser (`View(UseState(42), () => { })`).
 
 ### 5.2 L’état est possédé par une instance détenue par la page

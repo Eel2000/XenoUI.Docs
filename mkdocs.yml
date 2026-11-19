@@ -59,6 +59,10 @@ plugins:
             Home: Accueil
             Get started: Démarrer
             Guides: Guides
+            Fundamentals: Fondamentaux
+            Build the UI: Construire l’interface
+            App architecture: Architecture d’application
+            Tooling: Outils
             Architecture: Architecture
             Media: Média
             Performance: Performance
@@ -104,18 +108,29 @@ nav:
   - Get started:
       - installation.md
       - developer-guide.md
-      - troubleshooting.md
-  - Guides:
-      - xeno-sdk.md
-      - visual-studio.md
-      - vscode.md
       - sample-app.md
+      - troubleshooting.md
+  - Fundamentals:
+      - thinking-in-xenoui.md
+      - state.md
+      - lifecycle.md
+      - side-effects.md
+      - compose-comparison.md
+  - Build the UI:
       - components.md
+      - layouts.md
       - customization.md
       - animations.md
       - navigation-scaffold.md
       - text-layout-navigation.md
+  - App architecture:
+      - app-architecture.md
+      - testing.md
       - sample-api.md
+  - Tooling:
+      - xeno-sdk.md
+      - visual-studio.md
+      - vscode.md
   - Architecture:
       - architecture/index.md
       - architecture/runtime.md
@@ -128,6 +143,7 @@ nav:
       - media-controller.md
       - media-playback-implementation.md
   - Performance:
+      - performance.md
       - runtime-benchmark-a15.md
       - runtime-benchmark.md
       - runtime-critical-stabilization.md

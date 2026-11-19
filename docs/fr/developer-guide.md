@@ -242,7 +242,7 @@ Button("Enregistrer", Save, fontSize: 16, textColor: 0xFFFFFFFF)
 
 Le bouton standard fournit un feedback pressé par assombrissement. Il retourne un composant normal : tous les modificateurs restent disponibles.
 
-Pour aller plus loin : [écrire vos composants](components.md), [les personnaliser](customization.md) et [les animer](animations.md). Pour voir tout cela dans une application complète, suivez le [parcours du SampleApp](sample-app.md).
+Pour aller plus loin : [penser en XenoUI](thinking-in-xenoui.md), [l’état](state.md), [le cycle de vie](lifecycle.md), [les mises en page](layouts.md), [écrire vos composants](components.md), [les personnaliser](customization.md) et [les animer](animations.md). Pour voir tout cela dans une application complète, suivez le [parcours du SampleApp](sample-app.md).
 
 ## 7. État, mises à jour et reconstruction
 

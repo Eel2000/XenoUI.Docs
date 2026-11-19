@@ -4,6 +4,17 @@
 
 This index is the official entry point to the XenoUI documentation. It separates the current reference documents from historical notes, so that an old plan is not mistaken for the behaviour of the code.
 
+## Browse by topic
+
+| Topic | Start here |
+|---|---|
+| **Get started** | [Installation](installation.md) · [Developer guide](developer-guide.md) · [Learning from the SampleApp](sample-app.md) |
+| **Fundamentals** | [Thinking in XenoUI](thinking-in-xenoui.md) · [State and rebuilding](state.md) · [Lifecycle](lifecycle.md) · [Side effects and async work](side-effects.md) |
+| **Build the UI** | [Creating a component](components.md) · [Layouts](layouts.md) · [Customising](customization.md) · [Animations](animations.md) · [Navigation](navigation-scaffold.md) |
+| **App architecture and quality** | [Application architecture](app-architecture.md) · [Testing](testing.md) · [Performance](performance.md) |
+| **Coming from Android** | [From Jetpack Compose to XenoUI](compose-comparison.md) |
+| **Tooling** | [Xeno.SDK](xeno-sdk.md) · [Visual Studio](visual-studio.md) · [VS Code](vscode.md) |
+
 ## Recommended paths
 
 ### Application developer

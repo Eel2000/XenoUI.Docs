@@ -1,6 +1,6 @@
 # Application Lifecycle & Navigation
 
-> **Historical document.** Use the [developer guide](developer-guide.md#8-navigation-and-native-back) and the [runtime reference](architecture/runtime.md#10-navigation) for the current contract. This file may contain earlier assumptions.
+> **Historical document.** Use the [Lifecycle guide](lifecycle.md), the [developer guide](developer-guide.md#8-navigation-and-native-back) and the [runtime reference](architecture/runtime.md#10-navigation) for the current contract. This file may contain earlier assumptions.
 
 This document traces the complete lifecycle of a XenoUI application — from OS launch to pixels on screen.
 
