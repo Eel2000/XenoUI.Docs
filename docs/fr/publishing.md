@@ -107,6 +107,20 @@ Ce sont les propriétés standard de .NET pour Android ; leurs noms sont présen
 d’environnement, `file:chemin` pour lire un fichier) : confirmez les formes exactes dans la documentation Microsoft pour votre
 version du SDK, et ne mettez jamais de mot de passe en clair sur une ligne de commande journalisée.
 
+!!! success "Vérifié le 19 novembre 2026"
+    La commande ci-dessus a été exécutée pour de bon sur le `SampleApp` du dépôt avec le SDK .NET 11.0.100, le SDK Android 37.2.31 et
+    un JDK 21 (`-p:JavaSdkDirectory=…`) : elle a produit un **AAB signé de 36 Mo** (`com.xenoui.sample-Signed.aab`) et
+    `jarsigner -verify` a répondu « jar verified ». Le build s’est fait en Release sur **CoreCLR**, sans AOT ni trimming.
+
+    - Le SDK transforme `env:STORE_PASS` en `jarsigner -storepass:env STORE_PASS` : la forme `env:` fonctionne comme documenté.
+    - **Un keystore PKCS12** (le défaut depuis JDK 9) utilise un seul mot de passe pour le keystore et la clé. S’ils diffèrent, la
+      signature échoue avec `jarsigner: key associated with <alias> not a private key`. Créez la clé avec le même mot de passe
+      pour `-storepass` et `-keypass`.
+    - `dotnet publish` exige une seule cible : passez `-f net11.0-android`. Surcharger `TargetFrameworks` en ligne de commande se
+      propage aux projets référencés et casse leur restauration.
+
+    **Non vérifié :** l’installation du paquet sur un appareil, l’envoi à Google Play, AOT et trimming, et tout ce qui concerne iOS.
+
 | Paquet | Valeur de propriété | Usage |
 |---|---|---|
 | **AAB** (Android App Bundle) | `AndroidPackageFormats=aab` | Envoi à Google Play (requis pour les nouvelles applications) |

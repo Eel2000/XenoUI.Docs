@@ -105,6 +105,20 @@ These are the standard .NET for Android properties; their names are present in t
 `file:path` to read a file): confirm the exact forms in Microsoft's documentation for your SDK version, and never put a
 literal password on a command line that is logged.
 
+!!! success "Verified on 19 November 2026"
+    The command above was run for real on the repository's `SampleApp` with the .NET 11.0.100 SDK, Android SDK 37.2.31 and a
+    JDK 21 (`-p:JavaSdkDirectory=…`): it produced a **36 MB signed AAB** (`com.xenoui.sample-Signed.aab`) and `jarsigner -verify`
+    reported "jar verified". The build ran in Release on **CoreCLR** without AOT or trimming.
+
+    - The SDK turns `env:STORE_PASS` into `jarsigner -storepass:env STORE_PASS`, so the `env:` form works as documented.
+    - **A PKCS12 keystore** (the default since JDK 9) uses one password for the store and the key. If they differ, signing
+      fails with `jarsigner: key associated with <alias> not a private key`. Create the key with the same password for
+      `-storepass` and `-keypass`.
+    - `dotnet publish` needs a single target: pass `-f net11.0-android`. Overriding `TargetFrameworks` on the command line leaks to
+      the referenced projects and breaks their restore.
+
+    **Not verified:** installing the package on a device, an upload to Google Play, AOT and trimming, and everything iOS.
+
 | Package | Property value | Use |
 |---|---|---|
 | **AAB** (Android App Bundle) | `AndroidPackageFormats=aab` | Upload to Google Play (required for new apps) |
