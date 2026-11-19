@@ -117,7 +117,16 @@ literal password on a command line that is logged.
     - `dotnet publish` needs a single target: pass `-f net11.0-android`. Overriding `TargetFrameworks` on the command line leaks to
       the referenced projects and breaks their restore.
 
-    **Not verified:** installing the package on a device, an upload to Google Play, AOT and trimming, and everything iOS.
+    **Run on an emulator.** A signed Release APK built for `android-x64` was installed on an Android 36 x86_64 emulator and
+    launched: the SampleApp's home screen rendered, with no crash in logcat. The APK contains `libcoreclr.so` and no
+    `libmonosgen`, which confirms the CoreCLR runtime. (Use a different `XenoAppId` for test installs so they do not collide
+    with a build signed by another key: `INSTALL_FAILED_UPDATE_INCOMPATIBLE`.)
+
+    **AOT and trimming:** `-p:PublishTrimmed=true -p:RunAOTCompilation=true` stopped at once with `NETSDK1147` — the
+    `mobile-librarybuilder` workload must be installed (`dotnet workload restore <project>`) for the library projects. It was not
+    pursued further, so AOT and trimming remain **unverified**.
+
+    **Not verified:** a physical device, an upload to Google Play, AOT and trimming, and everything iOS.
 
 | Package | Property value | Use |
 |---|---|---|

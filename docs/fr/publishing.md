@@ -119,7 +119,16 @@ version du SDK, et ne mettez jamais de mot de passe en clair sur une ligne de co
     - `dotnet publish` exige une seule cible : passez `-f net11.0-android`. Surcharger `TargetFrameworks` en ligne de commande se
       propage aux projets référencés et casse leur restauration.
 
-    **Non vérifié :** l’installation du paquet sur un appareil, l’envoi à Google Play, AOT et trimming, et tout ce qui concerne iOS.
+    **Lancé sur un émulateur.** Un APK Release signé construit pour `android-x64` a été installé sur un émulateur Android 36 x86_64
+    et lancé : l’écran d’accueil du SampleApp s’est affiché, sans plantage dans logcat. L’APK contient `libcoreclr.so` et pas de
+    `libmonosgen`, ce qui confirme le runtime CoreCLR. (Utilisez un autre `XenoAppId` pour les installations de test, pour éviter
+    la collision avec un build signé par une autre clé : `INSTALL_FAILED_UPDATE_INCOMPATIBLE`.)
+
+    **AOT et trimming :** `-p:PublishTrimmed=true -p:RunAOTCompilation=true` s’est arrêté aussitôt avec `NETSDK1147` — le workload
+    `mobile-librarybuilder` doit être installé (`dotnet workload restore <projet>`) pour les projets de bibliothèque. Je n’ai pas
+    poursuivi : AOT et trimming restent **non vérifiés**.
+
+    **Non vérifié :** un appareil physique, l’envoi à Google Play, AOT et trimming, et tout ce qui concerne iOS.
 
 | Paquet | Valeur de propriété | Usage |
 |---|---|---|
