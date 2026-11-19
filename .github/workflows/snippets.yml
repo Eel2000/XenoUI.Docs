@@ -1,0 +1,45 @@
+name: Check documentation snippets
+
+# Compiles the tutorial samples (tools/DocSnippets) against a XenoUI checkout and renders the screenshots.
+# Manual on purpose: it needs a XenoUI ref that targets the .NET version below, and the site deployment
+# must not depend on it. Run it from the Actions tab after changing the tutorial or the XenoUI sources.
+
+on:
+  workflow_dispatch:
+    inputs:
+      xenoui_ref:
+        description: Branch, tag or commit of Eel2000/XenoUI to compile against
+        required: true
+        default: master
+      dotnet_version:
+        description: .NET SDK version
+        required: true
+        default: 11.0.x
+
+permissions:
+  contents: read
+
+jobs:
+  snippets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: XenoUI.Docs
+      - uses: actions/checkout@v4
+        with:
+          repository: Eel2000/XenoUI
+          ref: ${{ inputs.xenoui_ref }}
+          path: XenoUI
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet_version }}
+          dotnet-quality: preview
+      - name: Compile the samples
+        run: dotnet build XenoUI.Docs/tools/DocSnippets/DocSnippets.csproj -c Release
+      - name: Render the screenshots
+        run: dotnet run --project XenoUI.Docs/tools/DocSnippets/DocSnippets.csproj -c Release --no-build -- "$RUNNER_TEMP/img"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: ${{ runner.temp }}/img
